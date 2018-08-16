@@ -2,6 +2,10 @@ package com.agoda.boots.impl
 
 import com.agoda.boots.*
 import com.agoda.boots.Key.*
+import com.agoda.boots.Status.Companion.booted
+import com.agoda.boots.Status.Companion.booting
+import com.agoda.boots.Status.Companion.failed
+import com.agoda.boots.Status.Companion.idle
 import com.agoda.boots.Status.Failed
 
 open class DefaultReporter : Reporter {

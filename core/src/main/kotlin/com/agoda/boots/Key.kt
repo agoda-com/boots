@@ -1,5 +1,3 @@
-@file:JvmName("Key")
-
 package com.agoda.boots
 
 sealed class Key {
@@ -45,9 +43,11 @@ sealed class Key {
         override fun toString() = "ALL"
     }
 
-}
+    companion object {
+        @JvmStatic fun single(id: String = "") = Key.Single(id)
+        @JvmStatic fun multiple(vararg keys: Key.Single = emptyArray()) = Key.Multiple(keys.toSet())
+        @JvmStatic fun critical() = Key.Critical()
+        @JvmStatic fun all() = Key.All()
+    }
 
-fun single(id: String = "") = Key.Single(id)
-fun multiple(vararg ids: String = emptyArray()) = Key.Multiple(ids.map { single(it) }.toSet())
-fun critical() = Key.Critical()
-fun all() = Key.All()
+}

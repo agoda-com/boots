@@ -13,7 +13,7 @@ open class DefaultSequencer : Sequencer {
     }
 
     override fun count(key: Key): Int {
-
+        TODO("not implemented")
     }
 
     override fun next(key: Key, finished: Key): Bootable? {

@@ -6,7 +6,7 @@ import com.agoda.boots.impl.DefaultExecutor
 import com.agoda.boots.impl.DefaultNotifier
 import com.agoda.boots.impl.DefaultReporter
 import com.agoda.boots.impl.DefaultSequencer
-import com.agoda.boots.tools.CircuitFinder
+import com.agoda.boots.tools.SccFinder
 
 object Boots {
 
@@ -15,14 +15,14 @@ object Boots {
     var notifier: Notifier = DefaultNotifier()
     var sequencer: Sequencer = DefaultSequencer()
 
-    var isCircuitFinderEnabled = false
+    var isStrictMode = false
 
     private val boots = mutableSetOf<Bootable>()
 
     fun add(bootables: Set<Bootable>) {
         synchronized(boots) {
             boots.addAll(bootables)
-            if (isCircuitFinderEnabled) verify()
+            if (isStrictMode) verify()
         }
     }
 
@@ -96,15 +96,13 @@ object Boots {
     }
 
     private fun verify() {
-        executor.execute(true) {
-            val circuits = CircuitFinder(boots).find()
+        val sccs = SccFinder(boots).find()
 
-            if (circuits.isNotEmpty()) {
-                throw RuntimeException(
-                        "Circuits in bootable dependencies detected!",
-                        CircularBootException(circuits)
-                )
-            }
+        if (sccs.isNotEmpty()) {
+            throw RuntimeException(
+                    "Strong connections in bootable dependencies detected!",
+                    StrongConnectedBootException(sccs)
+            )
         }
     }
 

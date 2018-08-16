@@ -1,5 +1,3 @@
-@file:JvmName("Status")
-
 package com.agoda.boots
 
 sealed class Status {
@@ -9,10 +7,11 @@ sealed class Status {
     class Booted : Status()
     class Failed(val reason: Throwable) : Status()
 
+    companion object {
+        @JvmStatic fun idle(): Status = Status.Idle()
+        @JvmStatic fun booting(): Status = Status.Booting()
+        @JvmStatic fun booted(): Status = Status.Booted()
+        @JvmStatic fun failed(throwable: Throwable): Status = Status.Failed(throwable)
+    }
+
 }
-
-fun idle(): Status = Status.Idle()
-fun booting(): Status = Status.Booting()
-fun booted(): Status = Status.Booted()
-fun failed(throwable: Throwable): Status = Status.Failed(throwable)
-

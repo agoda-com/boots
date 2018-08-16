@@ -1,5 +1,7 @@
 package com.agoda.boots
 
+import com.agoda.boots.Key.Companion.multiple
+
 abstract class Bootable {
 
     abstract val key: Key.Single
