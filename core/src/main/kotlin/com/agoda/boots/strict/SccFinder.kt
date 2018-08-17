@@ -1,14 +1,12 @@
-package com.agoda.boots.tools
+package com.agoda.boots.strict
 
 import com.agoda.boots.Bootable
 import com.agoda.boots.Key
 import java.util.*
-import kotlin.math.min
 
 /**
  * This class is used to determine SCC (Strong connected components) in the
- * [Bootable]'s dependency tree every time you invoke [Boots.add()][com.agoda.boots.Boots.add]
- * if [isStrictMode][com.agoda.boots.Boots.isStrictMode] flag set to `true`.
+ * [Bootable]'s dependency tree every time you invoke [Boots.add()][com.agoda.boots.Boots.add].
  *
  * It's implementation is based on Tarjan algorithm of finding SCCs in directed graph.
  */
@@ -22,15 +20,15 @@ class SccFinder(private val boots: Set<Bootable>) {
     private var pre = 0
     private var count = 0
 
-    private val scc = mutableListOf<List<Key>>()
+    private val scc = mutableSetOf<Set<Key>>()
 
     /**
      * Determines if given [Bootable] set contains SCC
      * through it's dependency tree.
      *
-     * @return List of SCCs each represented by List<[Key]>
+     * @return Set of SCCs each represented by Set<[Key]>
      */
-    fun find(): List<List<Key>> {
+    fun find(): Set<Set<Key>> {
         for (i in 0 until nodes.size) if (!marked[i]) dfs(i)
         return scc
     }
@@ -53,7 +51,7 @@ class SccFinder(private val boots: Set<Bootable>) {
             return
         }
 
-        val sc = mutableListOf<Key>()
+        val sc = mutableSetOf<Key>()
 
         do {
             val pop = stack.pop()

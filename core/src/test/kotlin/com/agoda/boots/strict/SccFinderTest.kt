@@ -1,4 +1,4 @@
-package com.agoda.boots.tools
+package com.agoda.boots.strict
 
 import com.agoda.boots.Bootable
 import com.agoda.boots.Key.Companion.multiple
@@ -51,7 +51,7 @@ class SccFinderTest {
 
         // Assert
         assert(results.isNotEmpty())
-        assert(results[0].size == 3)
+        assert(results.first().size == 3)
     }
 
     @Test

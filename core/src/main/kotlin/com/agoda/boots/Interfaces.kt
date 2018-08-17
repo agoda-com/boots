@@ -17,5 +17,6 @@ interface Notifier {
 interface Sequencer {
     fun start(key: Key, boots: Set<Bootable>)
     fun count(key: Key): Int
-    fun next(key: Key, finished: Key): Bootable?
+    fun next(key: Key, finished: Report?): Bootable?
+    fun stop(key: Key)
 }

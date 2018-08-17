@@ -6,7 +6,8 @@ import com.agoda.boots.impl.DefaultExecutor
 import com.agoda.boots.impl.DefaultNotifier
 import com.agoda.boots.impl.DefaultReporter
 import com.agoda.boots.impl.DefaultSequencer
-import com.agoda.boots.tools.SccFinder
+import com.agoda.boots.strict.IccFinder
+import com.agoda.boots.strict.SccFinder
 
 object Boots {
 
@@ -15,14 +16,14 @@ object Boots {
     var notifier: Notifier = DefaultNotifier()
     var sequencer: Sequencer = DefaultSequencer()
 
-    var isStrictMode = false
+    var isStrictMode = true
 
     private val boots = mutableSetOf<Bootable>()
 
     fun add(bootables: Set<Bootable>) {
         synchronized(boots) {
             boots.addAll(bootables)
-            if (isStrictMode) verify()
+            verify()
         }
     }
 
@@ -96,6 +97,15 @@ object Boots {
     }
 
     private fun verify() {
+        val iccs = IccFinder(boots).find()
+
+        if (iccs.isNotEmpty() && isStrictMode) {
+            throw RuntimeException(
+                    "Incorrect connections in bootable dependencies detected!",
+                    IncorrectConnectedBootException(iccs)
+            )
+        }
+
         val sccs = SccFinder(boots).find()
 
         if (sccs.isNotEmpty()) {
