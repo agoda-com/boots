@@ -20,3 +20,16 @@ interface Sequencer {
     fun next(key: Key, finished: Report?): Bootable?
     fun stop(key: Key)
 }
+
+interface Logger {
+    fun log(level: Level, message: String)
+    fun log(level: Level, message: String, throwable: Throwable)
+
+    enum class Level {
+        VERBOSE,
+        DEBUG,
+        INFO,
+        WARNING,
+        ERROR
+    }
+}

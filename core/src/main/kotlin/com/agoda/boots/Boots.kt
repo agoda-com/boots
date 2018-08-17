@@ -15,6 +15,7 @@ object Boots {
     var reporter: Reporter = DefaultReporter()
     var notifier: Notifier = DefaultNotifier()
     var sequencer: Sequencer = DefaultSequencer()
+    var logger: Logger? = null
 
     var isStrictMode = true
 
@@ -99,11 +100,17 @@ object Boots {
     private fun verify() {
         val iccs = IccFinder(boots).find()
 
-        if (iccs.isNotEmpty() && isStrictMode) {
-            throw RuntimeException(
+        if (iccs.isNotEmpty()) {
+            val exception = RuntimeException(
                     "Incorrect connections in bootable dependencies detected!",
                     IncorrectConnectedBootException(iccs)
             )
+
+            if (isStrictMode) {
+                throw exception
+            } else {
+                logger?.log(Logger.Level.ERROR, "Problems in bootables detected!", exception)
+            }
         }
 
         val sccs = SccFinder(boots).find()
