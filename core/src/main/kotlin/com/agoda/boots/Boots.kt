@@ -24,6 +24,7 @@ object Boots {
     fun add(bootables: Set<Bootable>) {
         synchronized(boots) {
             boots.addAll(bootables)
+            sequencer.add(bootables)
             verify()
         }
     }
@@ -101,10 +102,7 @@ object Boots {
         val iccs = IccFinder(boots).find()
 
         if (iccs.isNotEmpty()) {
-            val exception = RuntimeException(
-                    "Incorrect connections in bootable dependencies detected!",
-                    IncorrectConnectedBootException(iccs)
-            )
+            val exception = IncorrectConnectedBootException(iccs)
 
             if (isStrictMode) {
                 throw exception
@@ -116,10 +114,7 @@ object Boots {
         val sccs = SccFinder(boots).find()
 
         if (sccs.isNotEmpty()) {
-            throw RuntimeException(
-                    "Strong connections in bootable dependencies detected!",
-                    StrongConnectedBootException(sccs)
-            )
+            throw StrongConnectedBootException(sccs)
         }
     }
 
