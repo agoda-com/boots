@@ -6,12 +6,12 @@ import com.agoda.boots.Status.Failed
 
 open class DefaultNotifier : Notifier {
 
-    protected val listeners = mutableMapOf<Key, MutableSet<Listener>>()
+    protected val listeners = mutableMapOf<Key, MutableList<Listener>>()
 
     override fun add(key: Key, listener: Listener) {
         synchronized(listeners) {
             if (!listeners.contains(key)) {
-                listeners[key] = mutableSetOf()
+                listeners[key] = mutableListOf()
             }
 
             listeners[key]!!.add(listener)
@@ -22,7 +22,9 @@ open class DefaultNotifier : Notifier {
         synchronized(listeners) {
             listeners[key]?.let {
                 notify(report, it)
-            } ?: listeners.forEach { k, listeners ->
+            }
+
+            listeners.forEach { k, listeners ->
                 when (k) {
                     is Key.Multiple -> if (k.contains(key)) check(k, listeners)
                     is Key.Critical -> if (Boots.single(key).isCritical) check(k, listeners)
@@ -32,7 +34,7 @@ open class DefaultNotifier : Notifier {
         }
     }
 
-    private fun notify(report: Report, listeners: MutableSet<Listener>) {
+    private fun notify(report: Report, listeners: MutableList<Listener>) {
         when (report.status) {
             is Booted -> listeners.forEach { it.onBoot(report) }
             is Failed -> listeners.forEach { it.onFailure(report) }
@@ -41,7 +43,7 @@ open class DefaultNotifier : Notifier {
         listeners.clear()
     }
 
-    private fun check(key: Key, listeners: MutableSet<Listener>) {
+    private fun check(key: Key, listeners: MutableList<Listener>) {
         Boots.report(key).let {
             if (isNotifiable(it)) {
                 notify(it, listeners)

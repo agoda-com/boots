@@ -19,9 +19,10 @@ object Boots {
 
     var isStrictMode = true
 
-    private val boots = mutableSetOf<Bootable>()
+    private val boots = mutableListOf<Bootable>()
+    private val lock = Any()
 
-    fun add(bootables: Set<Bootable>) {
+    fun add(bootables: Array<Bootable>) {
         synchronized(boots) {
             boots.addAll(bootables)
             sequencer.add(bootables)
@@ -36,28 +37,32 @@ object Boots {
         }
     }
 
-    fun multiple(key: Multiple): Set<Bootable> {
+    fun multiple(key: Multiple): List<Bootable> {
         synchronized(boots) {
-            val set = mutableSetOf<Bootable>()
-            key.forEach { set.add(single(it)) }
-            return set
+            val list = mutableListOf<Bootable>()
+            key.forEach { list.add(single(it)) }
+            return list
         }
     }
 
-    fun critical(): Set<Bootable> {
+    fun critical(): List<Bootable> {
         synchronized(boots) {
-            return boots.filter { it.isCritical }.toSet()
+            return boots.filter { it.isCritical }
         }
     }
 
-    fun all(): Set<Bootable> {
+    fun all(): List<Bootable> {
         synchronized(boots) {
             return boots
         }
     }
 
     fun boot(key: Key, listener: Listener) {
-
+        synchronized(lock) {
+            observe(key, listener)
+            sequencer.start(key)
+            boot(key)
+        }
     }
 
     fun boot(key: Key, listener: Listener.Builder.() -> Unit) {
@@ -96,6 +101,14 @@ object Boots {
 
     operator fun invoke(tail: Boots.() -> Unit) {
         tail(this)
+    }
+
+    private fun boot(key: Key) {
+        synchronized(lock) {
+            if (sequencer.count(key) > 0) {
+
+            }
+        }
     }
 
     private fun verify() {

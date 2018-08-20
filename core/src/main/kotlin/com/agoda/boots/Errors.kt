@@ -2,7 +2,7 @@ package com.agoda.boots
 
 class BootException(reasons: Map<Key, Throwable>) : Throwable()
 
-class StrongConnectedBootException(scc: Set<Set<Key>>) : Throwable() {
+class StrongConnectedBootException(scc: List<List<Key>>) : Throwable() {
     override val message = StringBuilder().apply {
         appendln("Strong connected components are not allowed!")
         scc.forEach {
@@ -16,7 +16,7 @@ class StrongConnectedBootException(scc: Set<Set<Key>>) : Throwable() {
     }.toString()
 }
 
-class IncorrectConnectedBootException(icc: Set<Pair<Key, Key>>) : Throwable() {
+class IncorrectConnectedBootException(icc: List<Pair<Key, Key>>) : Throwable() {
     override val message = StringBuilder().apply {
         appendln("Incorrect connected components are not allowed!")
         icc.forEach {

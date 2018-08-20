@@ -10,7 +10,7 @@ import java.util.*
  *
  * It's implementation is based on Tarjan algorithm of finding SCCs in directed graph.
  */
-class SccFinder(private val boots: Set<Bootable>) {
+class SccFinder(private val boots: List<Bootable>) {
 
     private val nodes = boots.map { it.key }.toTypedArray()
     private val marked = Array(nodes.size) { false }
@@ -18,9 +18,8 @@ class SccFinder(private val boots: Set<Bootable>) {
     private val stack = Stack<Int>()
 
     private var pre = 0
-    private var count = 0
 
-    private val scc = mutableSetOf<Set<Key>>()
+    private val scc = mutableListOf<List<Key>>()
 
     /**
      * Determines if given [Bootable] set contains SCC
@@ -28,7 +27,7 @@ class SccFinder(private val boots: Set<Bootable>) {
      *
      * @return Set of SCCs each represented by Set<[Key]>
      */
-    fun find(): Set<Set<Key>> {
+    fun find(): List<List<Key>> {
         for (i in 0 until nodes.size) if (!marked[i]) dfs(i)
         return scc
     }
@@ -51,7 +50,7 @@ class SccFinder(private val boots: Set<Bootable>) {
             return
         }
 
-        val sc = mutableSetOf<Key>()
+        val sc = mutableListOf<Key>()
 
         do {
             val pop = stack.pop()

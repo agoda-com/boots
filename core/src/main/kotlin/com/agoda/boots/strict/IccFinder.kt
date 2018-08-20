@@ -11,7 +11,7 @@ import com.agoda.boots.Key
  * - Bootable with [Bootable.isCritical] flag set to `true` which is dependent
  *   on a bootable with [Bootable.isCritical] flag set to `false`
  */
-class IccFinder(private val boots: Set<Bootable>) {
+class IccFinder(private val boots: List<Bootable>) {
 
     /**
      * Determines if given [Bootable] set contains ICC
@@ -19,8 +19,8 @@ class IccFinder(private val boots: Set<Bootable>) {
      *
      * @return Set of ICCs each represented by Pair<[Key], [Key]>
      */
-    fun find(): Set<Pair<Key, Key>> {
-        val results = mutableSetOf<Pair<Key, Key>>()
+    fun find(): List<Pair<Key, Key>> {
+        val results = mutableListOf<Pair<Key, Key>>()
 
         boots.filter {
             it.isCritical

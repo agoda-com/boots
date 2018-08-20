@@ -44,7 +44,7 @@ open class DefaultReporter : Reporter {
     }
 
     override fun get(key: Key): Report {
-        fun process(key: Key, boots: Set<Bootable>): Report {
+        fun process(key: Key, boots: List<Bootable>): Report {
             val all = boots.map { get(it.key) }
             val start = all.filter { it.status !is Status.Idle }.minBy { it.start }?.start ?: -1
             val time = all.filter { it.status !is Status.Idle }.maxBy { it.start + it.time }?.let { it.start + it.time - start } ?: -1
@@ -56,9 +56,9 @@ open class DefaultReporter : Reporter {
             }
 
             val dependent = if (key is All) {
-                boots.filter { it.dependencies.isEmpty() }.map { get(it.key) }.toSet()
+                boots.filter { it.dependencies.isEmpty() }.map { get(it.key) }
             } else {
-                all.toSet()
+                all
             }
 
             return Report(key, status, start, time, dependent)

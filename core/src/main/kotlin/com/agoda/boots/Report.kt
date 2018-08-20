@@ -5,5 +5,5 @@ data class Report(
         val status: Status,
         val start: Long = -1L,
         val time: Long = -1L,
-        val dependent: Set<Report> = emptySet()
+        val dependent: List<Report> = emptyList()
 )
