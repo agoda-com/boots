@@ -2,15 +2,15 @@ package com.agoda.boots.impl
 
 import com.agoda.boots.*
 import com.agoda.boots.Key.*
-import com.agoda.boots.Status.Booted
-import com.agoda.boots.Status.Booting
+import com.agoda.boots.Status.*
 import java.util.*
 import java.util.concurrent.LinkedBlockingQueue
 
 open class DefaultSequencer(val isMainThreadSupported: Boolean = false) : Sequencer {
 
     protected val boots = mutableListOf<Bootable>()
-    protected val tasks = mutableMapOf<Key, Queue<Key>>()
+    protected val map = mutableMapOf<Key, Queue<Key>>()
+    protected val tasks = mutableListOf<Queue<Key>>()
 
     override fun add(bootables: Array<Bootable>) {
         synchronized(boots) {
@@ -21,7 +21,7 @@ open class DefaultSequencer(val isMainThreadSupported: Boolean = false) : Sequen
 
     override fun start(key: Key) {
         synchronized(boots) {
-            tasks[key] = when (key) {
+            map[key] = when (key) {
                 is Single -> {
                     LinkedBlockingQueue<Key>(boots.size).apply {
                         addAll(resolve(boots.filter { it.isCritical }))
@@ -42,34 +42,35 @@ open class DefaultSequencer(val isMainThreadSupported: Boolean = false) : Sequen
                 }
                 is Critical -> resolve(boots.filter { it.isCritical })
             }
+
+            tasks.add(map[key]!!)
         }
     }
 
-    override fun count(key: Key): Int {
+    override fun count(): Int {
         synchronized(boots) {
-            return tasks[key]?.size ?: 0
+            return tasks.sumBy { it.size }
         }
     }
 
-    override fun next(key: Key, finished: Report?): Bootable? {
+    override fun next(finished: Report?): Bootable? {
         synchronized(boots) {
             finished?.let { update(it) }
 
-            val bootable = boots.find { it.key == tasks[key]?.peek() }
+            for (task in tasks) {
+                val bootable = boots.find { it.key == task.peek() }
 
-            return bootable?.let {
-                if (check(it)) {
-                    bootable.also { tasks[key]?.poll() }
-                } else {
-                    null
+                if (bootable != null) {
+                    if (check(bootable)) {
+                        return bootable.also {
+                            task.poll()
+                            if (task.isEmpty()) tasks.remove(task)
+                        }
+                    }
                 }
             }
-        }
-    }
 
-    override fun stop(key: Key) {
-        synchronized(boots) {
-            tasks[key]?.clear()
+            return null
         }
     }
 
@@ -99,40 +100,26 @@ open class DefaultSequencer(val isMainThreadSupported: Boolean = false) : Sequen
 
     protected fun update(report: Report) {
         if (report.status is Booted) {
-            tasks.values.forEach { it.remove(report.key) }
+            map.values.forEach { it.remove(report.key) }
+        } else if (report.status is Failed) {
+            val bootable = boots.find { it.key == report.key }!!
+
+            if (bootable.isCritical) {
+                map.values.forEach {
+                    if (it.contains(report.key)) {
+                        tasks.remove(it)
+                        it.clear()
+                    }
+                }
+            }
         }
     }
 
     protected fun check(bootable: Bootable): Boolean {
         val empty = bootable.dependencies.isEmpty()
+        val booted = Boots.report(bootable.dependencies).status is Booted
 
-        return if (!empty) {
-            val report = Boots.report(bootable.dependencies)
-            val booted = report.status is Booted
-
-            if (!booted) {
-                if (report.status is Status.Failed) {
-                    var proceed = true
-
-                    for (r in report.dependent) {
-                        if (r.status is Status.Failed) {
-                            if (boots.find { boot -> boot.key == r.key }!!.isCritical) {
-                                proceed = false
-                                break
-                            }
-                        }
-                    }
-
-                    proceed
-                } else {
-                    false
-                }
-            } else {
-                true
-            }
-        } else {
-            true
-        }
+        return empty || booted
     }
 
     private fun verify() {

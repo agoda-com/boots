@@ -15,7 +15,7 @@ import java.util.concurrent.*
  *
  * @see DefaultSequencer
  */
-open class DefaultExecutor : Executor {
+open class DefaultExecutor(override val capacity: Int = DEFAULT_CAPACITY) : Executor {
 
     private val pool = Executors.newCachedThreadPool()
 
@@ -25,6 +25,10 @@ open class DefaultExecutor : Executor {
         } else {
             executable()
         }
+    }
+
+    companion object {
+        const val DEFAULT_CAPACITY = 4
     }
 
 }

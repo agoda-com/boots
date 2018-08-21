@@ -1,6 +1,7 @@
 package com.agoda.boots
 
 interface Executor {
+    val capacity: Int
     fun execute(isConcurrent: Boolean, executable: () -> Unit)
 }
 
@@ -17,9 +18,8 @@ interface Notifier {
 interface Sequencer {
     fun add(bootables: Array<Bootable>)
     fun start(key: Key)
-    fun count(key: Key): Int
-    fun next(key: Key, finished: Report?): Bootable?
-    fun stop(key: Key)
+    fun count(): Int
+    fun next(finished: Report?): Bootable?
 }
 
 interface Logger {

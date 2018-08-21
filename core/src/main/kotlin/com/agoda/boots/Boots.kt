@@ -2,6 +2,11 @@ package com.agoda.boots
 
 import com.agoda.boots.Key.Multiple
 import com.agoda.boots.Key.Single
+import com.agoda.boots.Status.Companion.booted
+import com.agoda.boots.Status.Companion.booting
+import com.agoda.boots.Status.Companion.failed
+import com.agoda.boots.Status.Booted
+import com.agoda.boots.Status.Booting
 import com.agoda.boots.impl.DefaultExecutor
 import com.agoda.boots.impl.DefaultNotifier
 import com.agoda.boots.impl.DefaultReporter
@@ -21,6 +26,8 @@ object Boots {
 
     private val boots = mutableListOf<Bootable>()
     private val lock = Any()
+
+    private var capacity: Int = -1
 
     fun add(bootables: Array<Bootable>) {
         synchronized(boots) {
@@ -61,7 +68,7 @@ object Boots {
         synchronized(lock) {
             observe(key, listener)
             sequencer.start(key)
-            boot(key)
+            boot(null)
         }
     }
 
@@ -103,10 +110,48 @@ object Boots {
         tail(this)
     }
 
-    private fun boot(key: Key) {
+    private fun boot(finished: Report?) {
         synchronized(lock) {
-            if (sequencer.count(key) > 0) {
+            if (capacity == -1) {
+                capacity = executor.capacity
+            } else {
+                finished?.let { capacity++ }
+            }
 
+            while (true) {
+                if (capacity == 0 || sequencer.count() == 0) {
+                    break
+                }
+
+                sequencer.next(finished)?.let {
+                    val st = reporter.get(it.key).status
+
+                    if (st is Booting || st is Booted) {
+                        return@let
+                    }
+
+                    capacity--
+
+                    executor.execute(it.isConcurrent) {
+                        val start = System.currentTimeMillis()
+                        var status = booted()
+
+                        reporter.set(it.key, booting(), start)
+
+                        try {
+                            it.boot()
+                        } catch (t: Throwable) {
+                            status = failed(t)
+                        }
+
+                        val time = System.currentTimeMillis() - start
+                        val report = reporter.set(it.key, status, start, time)
+
+                        notifier.notify(it.key, report)
+
+                        boot(report)
+                    }
+                } ?: break
             }
         }
     }
