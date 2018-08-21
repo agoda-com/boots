@@ -51,13 +51,11 @@ class DefaultNotifierTest {
 
         val bootable2 = object : Bootable() {
             override val key = single2
-            override val isCritical = true
             override fun boot() {}
         }
 
         val bootable3 = object : Bootable() {
             override val key = single3
-            override val isCritical = true
             override fun boot() {}
         }
 
