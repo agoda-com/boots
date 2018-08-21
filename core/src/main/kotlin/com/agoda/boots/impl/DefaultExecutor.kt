@@ -17,6 +17,7 @@ import java.util.concurrent.*
  */
 open class DefaultExecutor(override val capacity: Int = DEFAULT_CAPACITY) : Executor {
 
+    override val isMainThreadSupported = false
     private val pool = Executors.newCachedThreadPool()
 
     override fun execute(isConcurrent: Boolean, executable: () -> Unit) {

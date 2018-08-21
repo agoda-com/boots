@@ -2,6 +2,7 @@ package com.agoda.boots
 
 interface Executor {
     val capacity: Int
+    val isMainThreadSupported: Boolean
     fun execute(isConcurrent: Boolean, executable: () -> Unit)
 }
 

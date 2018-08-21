@@ -6,7 +6,7 @@ import com.agoda.boots.Status.*
 import java.util.*
 import java.util.concurrent.LinkedBlockingQueue
 
-open class DefaultSequencer(val isMainThreadSupported: Boolean = false) : Sequencer {
+open class DefaultSequencer : Sequencer {
 
     protected val boots = mutableListOf<Bootable>()
     protected val map = mutableMapOf<Key, Queue<Key>>()
@@ -123,7 +123,7 @@ open class DefaultSequencer(val isMainThreadSupported: Boolean = false) : Sequen
     }
 
     private fun verify() {
-        if (isMainThreadSupported) {
+        if (Boots.executor.isMainThreadSupported) {
             return
         }
 
