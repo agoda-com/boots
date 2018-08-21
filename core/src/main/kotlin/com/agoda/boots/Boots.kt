@@ -1,7 +1,5 @@
 package com.agoda.boots
 
-import com.agoda.boots.Key.Multiple
-import com.agoda.boots.Key.Single
 import com.agoda.boots.Status.Companion.booted
 import com.agoda.boots.Status.Companion.booting
 import com.agoda.boots.Status.Companion.failed
@@ -32,35 +30,12 @@ object Boots {
     fun add(bootables: List<Bootable>) {
         synchronized(boots) {
             boots.addAll(bootables)
+
+            reporter.add(bootables)
+            notifier.add(bootables)
             sequencer.add(bootables)
+
             verify()
-        }
-    }
-
-    fun single(key: Single): Bootable {
-        synchronized(boots) {
-            return boots.find { it.key == key }
-                    ?: throw IllegalArgumentException("There is no bootable for $key key!")
-        }
-    }
-
-    fun multiple(key: Multiple): List<Bootable> {
-        synchronized(boots) {
-            val list = mutableListOf<Bootable>()
-            key.forEach { list.add(single(it)) }
-            return list
-        }
-    }
-
-    fun critical(): List<Bootable> {
-        synchronized(boots) {
-            return boots.filter { it.isCritical }
-        }
-    }
-
-    fun all(): List<Bootable> {
-        synchronized(boots) {
-            return boots
         }
     }
 

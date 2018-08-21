@@ -6,21 +6,35 @@ interface Executor {
     fun execute(isConcurrent: Boolean, executable: () -> Unit)
 }
 
-interface Reporter {
+interface Reporter : Holder {
     fun set(key: Key.Single, status: Status, start: Long = -1L, time: Long = -1L): Report
     fun get(key: Key): Report
 }
 
-interface Notifier {
+interface Notifier : Holder {
     fun add(key: Key, listener: Listener)
     fun notify(key: Key.Single, report: Report)
 }
 
-interface Sequencer {
-    fun add(bootables: List<Bootable>)
+interface Sequencer : Holder {
     fun start(key: Key)
     fun count(): Int
     fun next(finished: Report?): Bootable?
+}
+
+interface Holder {
+    val boots: MutableMap<Key, Bootable>
+
+    fun add(bootables: List<Bootable>) {
+        synchronized(boots) {
+            boots.putAll(bootables.map { it.key to it }.toMap())
+        }
+    }
+
+    fun multiple(key: Key.Multiple) = boots.values.filter { key.contains(it.key) }
+    fun critical() = boots.values.filter { it.isCritical }
+    fun all() = boots.values.toList()
+
 }
 
 interface Logger {
@@ -33,5 +47,15 @@ interface Logger {
         INFO,
         WARNING,
         ERROR
+    }
+}
+
+interface Listener {
+    fun onBoot(report: Report)
+    fun onFailure(report: Report)
+
+    class Builder {
+        var onBoot: (Report) -> Unit = {}
+        var onFailure: (Report) -> Unit = {}
     }
 }

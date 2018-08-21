@@ -10,6 +10,7 @@ import com.agoda.boots.Status.Failed
 
 open class DefaultReporter : Reporter {
 
+    override val boots = mutableMapOf<Key, Bootable>()
     protected val reports = mutableMapOf<Key.Single, Report>()
 
     override fun set(key: Key.Single, status: Status, start: Long, time: Long): Report {
@@ -20,7 +21,7 @@ open class DefaultReporter : Reporter {
                 reports[key]!!.copy(key = key, status = status, start = start, time = time)
             }
 
-            val bootable = Boots.single(key)
+            val bootable = boots[key]!!
 
             bootable.dependencies.forEach {
                 reports[it]!!.run {
@@ -68,9 +69,9 @@ open class DefaultReporter : Reporter {
             return reports[key]?.copy() ?: run {
                 when (key) {
                     is Single -> Report(key, idle())
-                    is Multiple -> process(key, Boots.multiple(key))
-                    is Critical -> process(key, Boots.critical())
-                    is All -> process(key, Boots.all())
+                    is Multiple -> process(key, multiple(key))
+                    is Critical -> process(key, critical())
+                    is All -> process(key, all())
                 }
             }
         }

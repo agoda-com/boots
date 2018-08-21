@@ -6,6 +6,7 @@ import com.agoda.boots.Status.Failed
 
 open class DefaultNotifier : Notifier {
 
+    override val boots = mutableMapOf<Key, Bootable>()
     protected val listeners = mutableMapOf<Key, MutableList<Listener>>()
 
     override fun add(key: Key, listener: Listener) {
@@ -27,7 +28,7 @@ open class DefaultNotifier : Notifier {
             listeners.forEach { k, listeners ->
                 when (k) {
                     is Key.Multiple -> if (k.contains(key)) check(k, listeners)
-                    is Key.Critical -> if (Boots.single(key).isCritical) check(k, listeners)
+                    is Key.Critical -> if (boots[key]!!.isCritical) check(k, listeners)
                     is Key.All -> check(k, listeners)
                 }
             }

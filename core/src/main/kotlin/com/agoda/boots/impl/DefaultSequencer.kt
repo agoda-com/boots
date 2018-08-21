@@ -8,39 +8,32 @@ import java.util.concurrent.LinkedBlockingQueue
 
 open class DefaultSequencer : Sequencer {
 
-    protected val boots = mutableListOf<Bootable>()
+    override val boots = mutableMapOf<Key, Bootable>()
     protected val map = mutableMapOf<Key, Queue<Key>>()
     protected val tasks = mutableListOf<Queue<Key>>()
-
-    override fun add(bootables: List<Bootable>) {
-        synchronized(boots) {
-            boots.addAll(bootables)
-            verify()
-        }
-    }
 
     override fun start(key: Key) {
         synchronized(boots) {
             map[key] = when (key) {
                 is Single -> {
                     LinkedBlockingQueue<Key>(boots.size).apply {
-                        addAll(resolve(boots.filter { it.isCritical }))
-                        addAll(resolve(listOf(boots.find { it.key == key }!!)))
+                        addAll(resolve(critical()))
+                        addAll(resolve(listOf(boots[key]!!)))
                     }
                 }
                 is Multiple -> {
                     LinkedBlockingQueue<Key>(boots.size).apply {
-                        addAll(resolve(boots.filter { it.isCritical }))
-                        addAll(resolve(boots.filter { key.contains(it.key) }))
+                        addAll(resolve(critical()))
+                        addAll(resolve(multiple(key)))
                     }
                 }
                 is All -> {
                     LinkedBlockingQueue<Key>(boots.size).apply {
-                        addAll(resolve(boots.filter { it.isCritical }))
-                        addAll(resolve(boots))
+                        addAll(resolve(critical()))
+                        addAll(resolve(all()))
                     }
                 }
-                is Critical -> resolve(boots.filter { it.isCritical })
+                is Critical -> resolve(critical())
             }
 
             tasks.add(map[key]!!)
@@ -58,7 +51,7 @@ open class DefaultSequencer : Sequencer {
             finished?.let { update(it) }
 
             for (task in tasks) {
-                val bootable = boots.find { it.key == task.peek() }
+                val bootable = boots[task.peek()]
 
                 if (bootable != null) {
                     if (check(bootable)) {
@@ -86,7 +79,7 @@ open class DefaultSequencer : Sequencer {
     protected fun visit(key: Key, visited: MutableMap<Key, Boolean>, queue: Queue<Key>) {
         visited[key] = true
 
-        val boot = boots.find { it.key == key }!!
+        val boot = boots[key]!!
         val status = Boots.report(key).status
 
         if (status !is Booted) {
@@ -102,7 +95,7 @@ open class DefaultSequencer : Sequencer {
         if (report.status is Booted) {
             map.values.forEach { it.remove(report.key) }
         } else if (report.status is Failed) {
-            val bootable = boots.find { it.key == report.key }!!
+            val bootable = boots[report.key]!!
 
             if (bootable.isCritical) {
                 map.values.forEach {
@@ -129,12 +122,12 @@ open class DefaultSequencer : Sequencer {
 
         val results = mutableListOf<Pair<Key, Key>>()
 
-        boots.filter {
+        boots.filterValues {
             it.dependencies.isNotEmpty() && !it.isConcurrent
-        }.forEach { boot ->
-            boot.dependencies.forEach { key ->
-                if (boots.find { it.key == key }!!.isConcurrent) {
-                    results.add(boot.key to key)
+        }.forEach {
+            it.value.dependencies.forEach { key ->
+                if (boots[key]!!.isConcurrent) {
+                    results.add(it.value.key to key)
                 }
             }
         }

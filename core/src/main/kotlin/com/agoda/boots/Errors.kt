@@ -1,6 +1,13 @@
 package com.agoda.boots
 
-class BootException(reasons: Map<Key, Throwable>) : Throwable()
+class BootException(reasons: Map<Key, Throwable>) : Throwable() {
+    override val message = StringBuilder().apply {
+        appendln("Problems were encountered while booting sequence!")
+        reasons.forEach { key, value ->
+            appendln("$key -> ${value.message}")
+        }
+    }.toString()
+}
 
 class StrongConnectedBootException(scc: List<List<Key>>) : Throwable() {
     override val message = StringBuilder().apply {
