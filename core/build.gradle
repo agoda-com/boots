@@ -8,6 +8,10 @@ sourceSets {
 }
 
 dependencies {
-    compile libraries.kotlin
-    testCompile libraries.junit
+    implementation libraries.kotlin
+
+    testImplementation libraries.junit
+    testImplementation libraries.mockito
+    testImplementation libraries.mockitoKotlin
+    testImplementation libraries.kotlinTest
 }
