@@ -16,7 +16,7 @@ interface Notifier {
 }
 
 interface Sequencer {
-    fun add(bootables: Array<Bootable>)
+    fun add(bootables: List<Bootable>)
     fun start(key: Key)
     fun count(): Int
     fun next(finished: Report?): Bootable?

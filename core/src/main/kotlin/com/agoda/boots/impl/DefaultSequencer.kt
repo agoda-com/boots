@@ -12,7 +12,7 @@ open class DefaultSequencer(val isMainThreadSupported: Boolean = false) : Sequen
     protected val map = mutableMapOf<Key, Queue<Key>>()
     protected val tasks = mutableListOf<Queue<Key>>()
 
-    override fun add(bootables: Array<Bootable>) {
+    override fun add(bootables: List<Bootable>) {
         synchronized(boots) {
             boots.addAll(bootables)
             verify()

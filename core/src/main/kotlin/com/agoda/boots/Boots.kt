@@ -29,7 +29,7 @@ object Boots {
 
     private var capacity: Int = -1
 
-    fun add(bootables: Array<Bootable>) {
+    fun add(bootables: List<Bootable>) {
         synchronized(boots) {
             boots.addAll(bootables)
             sequencer.add(bootables)

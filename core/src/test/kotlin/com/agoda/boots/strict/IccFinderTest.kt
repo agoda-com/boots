@@ -23,7 +23,7 @@ class IccFinderTest {
         }
 
         // Act
-        val results = IccFinder(setOf(bootable1, bootable2)).find()
+        val results = IccFinder(listOf(bootable1, bootable2)).find()
 
         // Assert
         assert(results.isNotEmpty())
@@ -46,7 +46,7 @@ class IccFinderTest {
         }
 
         // Act
-        val results = IccFinder(setOf(bootable1, bootable2)).find()
+        val results = IccFinder(listOf(bootable1, bootable2)).find()
 
         // Assert
         assert(results.isEmpty())

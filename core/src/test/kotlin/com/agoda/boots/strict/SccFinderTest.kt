@@ -46,7 +46,7 @@ class SccFinderTest {
         }
 
         // Act
-        val results = SccFinder(setOf(bootable1, bootable2, bootable3, bootable4, bootable5, bootable6))
+        val results = SccFinder(listOf(bootable1, bootable2, bootable3, bootable4, bootable5, bootable6))
                 .find()
 
         // Assert
@@ -75,7 +75,7 @@ class SccFinderTest {
         }
 
         // Act
-        val results = SccFinder(setOf(bootable1, bootable2, bootable3, bootable4, bootable5, bootable6))
+        val results = SccFinder(listOf(bootable1, bootable2, bootable3, bootable4, bootable5, bootable6))
                 .find()
 
         // Assert
