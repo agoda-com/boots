@@ -12,6 +12,11 @@ open class DefaultSequencer : Sequencer {
     protected val map = mutableMapOf<Key, Queue<Key>>()
     protected val tasks = mutableListOf<Queue<Key>>()
 
+    override fun add(bootables: List<Bootable>) {
+        super.add(bootables)
+        verify()
+    }
+
     override fun start(key: Key) {
         synchronized(boots) {
             map[key] = when (key) {
@@ -71,6 +76,7 @@ open class DefaultSequencer : Sequencer {
         val queue = LinkedBlockingQueue<Key>(boots.size)
         val visited = mutableMapOf<Key, Boolean>()
 
+        boots.forEach { visited[it.key] = false }
         bootables.forEach { if (visited[it.key] == false) visit(it.key, visited, queue) }
 
         return queue
@@ -86,7 +92,8 @@ open class DefaultSequencer : Sequencer {
             if (boot.dependencies.isEmpty()) {
                 queue.add(key)
             } else {
-                boot.dependencies.forEach { if (visited[key] == false) visit(it, visited, queue) }
+                boot.dependencies.forEach { if (visited[it] == false) visit(it, visited, queue) }
+                queue.add(key)
             }
         }
     }
@@ -109,10 +116,16 @@ open class DefaultSequencer : Sequencer {
     }
 
     protected fun check(bootable: Bootable): Boolean {
+        val critical = bootable.isCritical
         val empty = bootable.dependencies.isEmpty()
         val booted = Boots.report(bootable.dependencies).status is Booted
 
-        return empty || booted
+        return if (critical) {
+            empty or booted
+        } else {
+            val cb = Boots.report(Key.critical()).status is Booted
+            cb and (empty or booted)
+        }
     }
 
     private fun verify() {
