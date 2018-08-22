@@ -14,13 +14,16 @@ import com.agoda.boots.strict.SccFinder
 
 object Boots {
 
-    var executor: Executor = DefaultExecutor()
-    var reporter: Reporter = DefaultReporter()
-    var notifier: Notifier = DefaultNotifier()
-    var sequencer: Sequencer = DefaultSequencer()
-    var logger: Logger? = null
+    private var executor: Executor = DefaultExecutor()
+    private var reporter: Reporter = DefaultReporter()
+    private var notifier: Notifier = DefaultNotifier()
+    private var sequencer: Sequencer = DefaultSequencer()
+    private var logger: Logger? = null
+    private var isStrictMode = true
 
-    var isStrictMode = true
+    internal var isMainThreadSupported = false
+        get() = executor.isMainThreadSupported
+        private set
 
     private val boots = mutableListOf<Bootable>()
     private val lock = Any()
@@ -29,13 +32,13 @@ object Boots {
 
     fun add(bootables: List<Bootable>) {
         synchronized(boots) {
+            verify(boots.plus(bootables))
+
             boots.addAll(bootables)
 
             reporter.add(bootables)
             notifier.add(bootables)
             sequencer.add(bootables)
-
-            verify()
         }
     }
 
@@ -85,6 +88,18 @@ object Boots {
         tail(this)
     }
 
+    internal fun reset () {
+        executor = DefaultExecutor()
+        reporter = DefaultReporter()
+        notifier = DefaultNotifier()
+        sequencer = DefaultSequencer()
+        logger = null
+        isStrictMode = true
+
+        boots.clear()
+        capacity = -1
+    }
+
     private fun boot(finished: Report?) {
         synchronized(lock) {
             if (capacity == -1) {
@@ -131,8 +146,8 @@ object Boots {
         }
     }
 
-    private fun verify() {
-        val iccs = IccFinder(boots).find()
+    private fun verify(bootables: List<Bootable>) {
+        val iccs = IccFinder(bootables).find()
 
         if (iccs.isNotEmpty()) {
             val exception = IncorrectConnectedBootException(iccs)
@@ -144,10 +159,32 @@ object Boots {
             }
         }
 
-        val sccs = SccFinder(boots).find()
+        val sccs = SccFinder(bootables).find()
 
         if (sccs.isNotEmpty()) {
             throw StrongConnectedBootException(sccs)
+        }
+    }
+
+    fun configure(tail: Configurator.() -> Unit) {
+        Configurator().apply(tail).configure()
+    }
+
+    class Configurator {
+        var executor: Executor? = null
+        var reporter: Reporter? = null
+        var notifier: Notifier? = null
+        var sequencer: Sequencer? = null
+        var logger: Logger? = null
+        var isStrictMode: Boolean? = null
+
+        fun configure() {
+            executor?.let { Boots.executor = it }
+            reporter?.let { Boots.reporter = it }
+            notifier?.let { Boots.notifier = it }
+            sequencer?.let { Boots.sequencer = it }
+            logger?.let { Boots.logger = it }
+            isStrictMode?.let { Boots.isStrictMode = it }
         }
     }
 

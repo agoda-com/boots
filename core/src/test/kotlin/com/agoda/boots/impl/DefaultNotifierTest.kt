@@ -32,7 +32,7 @@ class DefaultNotifierTest {
 
     @Before
     fun setup() {
-        Boots.reporter = reporter
+        Boots { configure { reporter = this@DefaultNotifierTest.reporter } }
         whenever(reporter.get(any())).thenReturn(Report(single("default"), idle()))
     }
 
@@ -101,7 +101,7 @@ class DefaultNotifierTest {
 
     @After
     fun cleanup() {
-        Boots.reporter = DefaultReporter()
+        Boots { reset() }
     }
 
 }

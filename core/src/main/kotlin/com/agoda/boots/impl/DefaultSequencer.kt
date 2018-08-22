@@ -13,8 +13,8 @@ open class DefaultSequencer : Sequencer {
     protected val tasks = mutableListOf<Queue<Key>>()
 
     override fun add(bootables: List<Bootable>) {
+        verify(boots.values.plus(bootables))
         super.add(bootables)
-        verify()
     }
 
     override fun start(key: Key) {
@@ -128,19 +128,19 @@ open class DefaultSequencer : Sequencer {
         }
     }
 
-    private fun verify() {
-        if (Boots.executor.isMainThreadSupported) {
+    private fun verify(bootables: List<Bootable>) {
+        if (Boots.isMainThreadSupported) {
             return
         }
 
         val results = mutableListOf<Pair<Key, Key>>()
 
-        boots.filterValues {
+        bootables.filter {
             it.dependencies.isNotEmpty() && !it.isConcurrent
-        }.forEach {
-            it.value.dependencies.forEach { key ->
-                if (boots[key]!!.isConcurrent) {
-                    results.add(it.value.key to key)
+        }.forEach { boot ->
+            boot.dependencies.forEach { key ->
+                if (bootables.find { it.key == key }!!.isConcurrent) {
+                    results.add(boot.key to key)
                 }
             }
         }

@@ -1,18 +1,31 @@
 package com.agoda.boots.impl
 
-import com.agoda.boots.Bootable
-import com.agoda.boots.Boots
-import com.agoda.boots.IncorrectConnectedBootException
+import com.agoda.boots.*
+import com.agoda.boots.Key.Companion.critical
 import com.agoda.boots.Key.Companion.multiple
 import com.agoda.boots.Key.Companion.single
-import com.agoda.boots.Report
 import com.agoda.boots.Status.Companion.booted
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.whenever
 import org.junit.After
+import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.Mock
+import org.mockito.junit.MockitoJUnitRunner
 
+@RunWith(MockitoJUnitRunner::class)
 class DefaultSequencerTest {
 
+    @Mock lateinit var reporter: Reporter
+
     private val sequencer = DefaultSequencer()
+
+    @Before
+    fun setup() {
+        Boots { configure { reporter = this@DefaultSequencerTest.reporter } }
+        whenever(reporter.get(any())).thenReturn(Report(single("default"), Status.idle()))
+    }
 
     @Test(expected = IncorrectConnectedBootException::class)
     fun testVerifyFailure() {
@@ -58,7 +71,7 @@ class DefaultSequencerTest {
             override fun boot() {}
         }
 
-        Boots.reporter.add(listOf(bootable1, bootable2, bootable3, bootable4))
+        Boots.add(listOf(bootable1, bootable2, bootable3, bootable4))
         sequencer.add(listOf(bootable1, bootable2, bootable3, bootable4))
 
         // Act
@@ -67,11 +80,15 @@ class DefaultSequencerTest {
 
         val boot1 = sequencer.next(null)
         val boot2 = sequencer.next(null)
-        Boots.reporter.set(boot1!!.key, booted())
-        val boot3 = sequencer.next(Report(boot1.key, booted()))
+
+        whenever(reporter.get(critical())).thenReturn(Report(critical(), booted()))
+
+        val boot3 = sequencer.next(Report(boot1!!.key, booted()))
         val boot4 = sequencer.next(null)
-        Boots.reporter.set(boot3!!.key, booted())
-        val boot5 = sequencer.next(Report(boot3.key, booted()))
+
+        whenever(reporter.get(bootable3.dependencies)).thenReturn(Report(bootable3.dependencies, booted()))
+
+        val boot5 = sequencer.next(Report(boot3!!.key, booted()))
 
         // Assert
         assert(boot1.key == single("Key 1"))
@@ -84,7 +101,7 @@ class DefaultSequencerTest {
 
     @After
     fun cleanup() {
-        Boots.reporter = DefaultReporter()
+        Boots { reset() }
     }
 
 }
