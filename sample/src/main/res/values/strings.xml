@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Boots Sample</string>
+    <string name="java_name">Boots JSample</string>
+    <string name="kotlin_name">Boots KSample</string>
+    <string name="boot_complete">Boot has completed!</string>
+</resources>
