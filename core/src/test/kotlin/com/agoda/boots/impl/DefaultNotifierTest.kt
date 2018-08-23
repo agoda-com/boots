@@ -25,10 +25,10 @@ class DefaultNotifierTest {
     private val notifier = DefaultNotifier()
 
     @Mock lateinit var reporter: Reporter
-    @Mock lateinit var singleListener: Listener
-    @Mock lateinit var multipleListener: Listener
-    @Mock lateinit var criticalListener: Listener
-    @Mock lateinit var allListener: Listener
+    @Mock lateinit var singleListener: (Report) -> Unit
+    @Mock lateinit var multipleListener: (Report) -> Unit
+    @Mock lateinit var criticalListener: (Report) -> Unit
+    @Mock lateinit var allListener: (Report) -> Unit
 
     @Before
     fun setup() {
@@ -63,10 +63,10 @@ class DefaultNotifierTest {
 
         with(notifier) {
             add(listOf(bootable1, bootable2, bootable3))
-            add(single1, singleListener)
-            add(multiple, multipleListener)
-            add(Key.critical(), criticalListener)
-            add(Key.all(), allListener)
+            add(single1, Listener().apply { onBoot = singleListener })
+            add(multiple, Listener().apply { onFailure = multipleListener })
+            add(Key.critical(), Listener().apply { onBoot = criticalListener })
+            add(Key.all(), Listener().apply { onFailure = allListener })
         }
 
         whenever(reporter.get(critical())).thenReturn(Report(critical(), booted()))
@@ -75,8 +75,8 @@ class DefaultNotifierTest {
         notifier.notify(single1, Report(single1, booted()))
 
         // Assert
-        verify(singleListener).onBoot(any())
-        verify(criticalListener).onBoot(any())
+        verify(singleListener).invoke(any())
+        verify(criticalListener).invoke(any())
         verifyZeroInteractions(multipleListener)
         verifyZeroInteractions(allListener)
 
@@ -95,8 +95,8 @@ class DefaultNotifierTest {
         notifier.notify(single3, Report(single3, failed(Throwable())))
 
         // Assert
-        verify(multipleListener).onFailure(any())
-        verify(allListener).onFailure(any())
+        verify(multipleListener).invoke(any())
+        verify(allListener).invoke(any())
     }
 
     @After

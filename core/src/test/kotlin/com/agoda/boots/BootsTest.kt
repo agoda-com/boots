@@ -21,7 +21,7 @@ class BootsTest {
     @Mock lateinit var notifier: Notifier
     @Mock lateinit var reporter: Reporter
     @Mock lateinit var sequencer: Sequencer
-    @Mock lateinit var listener: Listener
+    @Mock lateinit var listener: (Report) -> Unit
 
     @Before
     fun setup() {
@@ -103,6 +103,7 @@ class BootsTest {
     fun testObserve() {
         // Arrange
         val key = single("Key 1")
+        val listener = Listener()
 
         // Act
         Boots.observe(key, listener)
@@ -180,12 +181,12 @@ class BootsTest {
         }
 
         // Act
-        Boots.boot(key3, listener)
-        Boots.boot(key4, listener)
+        Boots.boot(key3, Listener().apply { onBoot = listener })
+        Boots.boot(key4, Listener().apply { onBoot = listener })
 
         // Assert
         verify(executor, times(4)).execute(eq(true), any())
-        verify(listener, times(2)).onBoot(any())
+        verify(listener, times(2)).invoke(any())
 
         val report = Boots.report(all())
         assert(report.status is Booted)
