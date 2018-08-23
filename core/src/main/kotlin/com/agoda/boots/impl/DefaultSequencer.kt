@@ -2,13 +2,16 @@ package com.agoda.boots.impl
 
 import com.agoda.boots.*
 import com.agoda.boots.Key.*
+import com.agoda.boots.Logger.Level.*
 import com.agoda.boots.Status.*
 import java.util.*
 import java.util.concurrent.LinkedBlockingQueue
 
 open class DefaultSequencer : Sequencer {
 
-    override val boots = mutableMapOf<Key, Bootable>()
+    override val boots: MutableMap<Key, Bootable> = mutableMapOf()
+    override var logger: Logger? = null
+
     protected val map = mutableMapOf<Key, Queue<Key>>()
     protected val tasks = mutableListOf<Queue<Key>>()
 
@@ -41,6 +44,18 @@ open class DefaultSequencer : Sequencer {
                 is Critical -> resolve(critical())
             }
 
+            logger?.let {
+                val queue = map[key]!!
+                val sb = StringBuilder()
+
+                queue.forEachIndexed { i, key ->
+                    sb.append(key)
+                    if (i < queue.size - 1) sb.append(" -> ")
+                }
+
+                it.log(DEBUG, "Resolved: $sb")
+            }
+
             tasks.add(map[key]!!)
         }
     }
@@ -53,21 +68,29 @@ open class DefaultSequencer : Sequencer {
 
     override fun next(finished: Report?): Bootable? {
         synchronized(boots) {
+            logger?.log(DEBUG, "Picking next bootable...")
+
             finished?.let { update(it) }
 
             for (task in tasks) {
                 val bootable = boots[task.peek()]
 
                 if (bootable != null) {
+                    logger?.log(DEBUG, "Checking ${bootable.key}...")
+
                     if (check(bootable)) {
                         return bootable.also {
+                            logger?.log(DEBUG, "Check of ${it.key} has passed!")
                             task.poll()
                             if (task.isEmpty()) tasks.remove(task)
                         }
+                    } else {
+                        logger?.log(DEBUG, "Check hasn't passed, moving next...")
                     }
                 }
             }
 
+            logger?.log(DEBUG, "Nothing found!")
             return null
         }
     }
@@ -133,6 +156,8 @@ open class DefaultSequencer : Sequencer {
             return
         }
 
+        logger?.log(INFO, "Verifying that non-concurrent bootables are not dependent on concurrent ones")
+
         val results = mutableListOf<Pair<Key, Key>>()
 
         bootables.filter {
@@ -148,6 +173,8 @@ open class DefaultSequencer : Sequencer {
         if (results.isNotEmpty()) {
             throw IncorrectConnectedBootException(results)
         }
+
+        logger?.log(INFO, "Verification complete!")
     }
 
 }

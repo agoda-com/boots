@@ -6,6 +6,7 @@ import com.agoda.boots.Status.Companion.booting
 import com.agoda.boots.Status.Companion.failed
 import com.agoda.boots.Status.Booted
 import com.agoda.boots.Status.Booting
+import com.agoda.boots.Status.Failed
 import com.agoda.boots.impl.DefaultExecutor
 import com.agoda.boots.impl.DefaultNotifier
 import com.agoda.boots.impl.DefaultReporter
@@ -94,7 +95,13 @@ object Boots {
     fun boot(key: Key, listener: Listener) {
         synchronized(lock) {
             observe(key, listener)
+
+            logger?.log(INFO, "Building task for $key...")
             sequencer.start(key)
+
+            logger?.log(INFO, "Task building for $key is complete!")
+            logger?.log(INFO, "Starting boot process for $key...")
+
             boot(null)
         }
     }
@@ -149,6 +156,8 @@ object Boots {
                 }
 
                 sequencer.next(finished)?.let {
+                    logger?.log(DEBUG, "Sequencer proposed to boot ${it.key}, checking...")
+
                     val st = reporter.get(it.key).status
 
                     if (st is Booting || st is Booted) {
@@ -157,7 +166,11 @@ object Boots {
 
                     capacity--
 
+                    logger?.log(DEBUG, "${it.key} can be executed, passing to executor...")
+
                     executor.execute(it.isConcurrent) {
+                        logger?.log(INFO, "Bootable ${it.key} is starting boot process...")
+
                         val start = System.currentTimeMillis()
                         var status = booted()
 
@@ -171,6 +184,15 @@ object Boots {
 
                         val time = System.currentTimeMillis() - start
                         val report = reporter.set(it.key, status, start, time)
+
+                        logger?.let { logger ->
+                            if (status is Booted) {
+                                logger.log(INFO, "Bootable ${it.key} booted successfully in $time ms!")
+                            } else if (status is Failed) {
+                                logger.log(if (it.isCritical) ERROR else WARNING,
+                                        "Bootable ${it.key} failed to load due to: ${status.reason}")
+                            }
+                        }
 
                         notifier.notify(it.key, report)
 

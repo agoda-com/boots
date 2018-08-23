@@ -2,6 +2,7 @@ package com.agoda.boots.impl
 
 import com.agoda.boots.*
 import com.agoda.boots.Key.*
+import com.agoda.boots.Logger.Level.*
 import com.agoda.boots.Status.Companion.booted
 import com.agoda.boots.Status.Companion.booting
 import com.agoda.boots.Status.Companion.failed
@@ -10,7 +11,9 @@ import com.agoda.boots.Status.Failed
 
 open class DefaultReporter : Reporter {
 
-    override val boots = mutableMapOf<Key, Bootable>()
+    override val boots: MutableMap<Key, Bootable> = mutableMapOf()
+    override var logger: Logger? = null
+
     protected val reports = mutableMapOf<Key.Single, Report>()
 
     override fun set(key: Key.Single, status: Status, start: Long, time: Long): Report {
@@ -45,6 +48,8 @@ open class DefaultReporter : Reporter {
     }
 
     override fun get(key: Key): Report {
+        logger?.log(DEBUG, "Generating report for $key...")
+
         fun process(key: Key, boots: List<Bootable>): Report {
             val all = boots.map { get(it.key) }
             val start = all.filter { it.status !is Status.Idle }.minBy { it.start }?.start ?: -1

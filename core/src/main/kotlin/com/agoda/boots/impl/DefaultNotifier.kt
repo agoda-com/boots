@@ -1,12 +1,15 @@
 package com.agoda.boots.impl
 
 import com.agoda.boots.*
+import com.agoda.boots.Logger.Level.*
 import com.agoda.boots.Status.Booted
 import com.agoda.boots.Status.Failed
 
 open class DefaultNotifier : Notifier {
 
-    override val boots = mutableMapOf<Key, Bootable>()
+    override val boots: MutableMap<Key, Bootable> = mutableMapOf()
+    override var logger: Logger? = null
+
     protected val listeners = mutableMapOf<Key, MutableList<Listener>>()
 
     override fun add(key: Key, listener: Listener) {
@@ -20,8 +23,11 @@ open class DefaultNotifier : Notifier {
     }
 
     override fun notify(key: Key.Single, report: Report) {
+        logger?.log(DEBUG, "Got report from ${report.key}, looking for listeners to invoke...")
+
         synchronized(listeners) {
             listeners[key]?.let {
+                logger?.log(DEBUG, "Listeners of ${report.key} are ready to be notified, invoking...")
                 notify(report, it)
             }
 
@@ -47,6 +53,7 @@ open class DefaultNotifier : Notifier {
     private fun check(key: Key, listeners: MutableList<Listener>) {
         Boots.report(key).let {
             if (isNotifiable(it)) {
+                logger?.log(DEBUG, "Listeners of $it are ready to be notified, invoking...")
                 notify(it, listeners)
             }
         }

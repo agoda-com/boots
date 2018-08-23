@@ -24,6 +24,7 @@ interface Sequencer : Holder {
 
 interface Holder {
     val boots: MutableMap<Key, Bootable>
+    var logger: Logger?
 
     fun add(bootables: List<Bootable>) {
         synchronized(boots) {
