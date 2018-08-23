@@ -83,6 +83,12 @@ object Boots {
                 logger?.log(DEBUG, "Overriding strict mode: $it")
                 Boots.isStrictMode = it
             }
+
+            logger?.let {
+                Boots.reporter.logger = it
+                Boots.notifier.logger = it
+                Boots.sequencer.logger = it
+            }
         }
 
         logger?.log(INFO, "Configuration finished!")
