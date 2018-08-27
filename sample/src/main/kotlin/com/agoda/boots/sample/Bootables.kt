@@ -4,6 +4,8 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.preference.PreferenceManager
 import com.agoda.boots.Bootable
+import com.agoda.boots.Key
+import com.agoda.boots.Key.Companion.multiple
 import java.lang.Math.random
 import java.util.*
 
@@ -28,7 +30,7 @@ class NetworkRequestBootable : Bootable() {
     override val key = Keys.NETWORK
 
     override fun boot() {
-        // No actual request, for test purposes only
+        // No actual code, for test purposes only
         Thread.sleep(1000L)
     }
 
@@ -38,8 +40,19 @@ class DatabaseBootable : Bootable() {
     override val key = Keys.DATABASE
 
     override fun boot() {
-        // No actual database, for test purposes only
+        // No actual code, for test purposes only
         Thread.sleep(1500L)
+    }
+
+}
+
+class DatabaseCacheBootable : Bootable() {
+    override val key = Keys.DATABASE_CACHE
+    override val dependencies = multiple(Keys.DATABASE)
+
+    override fun boot() {
+        // No actual code, for test purposes only
+        Thread.sleep(300L)
     }
 
 }

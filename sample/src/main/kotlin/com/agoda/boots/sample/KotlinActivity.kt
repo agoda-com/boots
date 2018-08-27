@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import com.agoda.boots.Boots
+import com.agoda.boots.Key.Companion.all
 import com.agoda.boots.Key.Companion.multiple
 import com.agoda.boots.Listener
 import com.agoda.boots.Logger.Level.DEBUG
@@ -16,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class KotlinActivity : AppCompatActivity() {
 
-    private val key = multiple(Keys.DATABASE, Keys.NETWORK, Keys.RANDOM)
+    private val key = all()
 
     var listener: Listener? = null
 

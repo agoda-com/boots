@@ -25,6 +25,7 @@ class DefaultNotifierTest {
     private val notifier = DefaultNotifier()
 
     @Mock lateinit var reporter: Reporter
+    @Mock lateinit var executor: Executor
     @Mock lateinit var singleListener: (Report) -> Unit
     @Mock lateinit var multipleListener: (Report) -> Unit
     @Mock lateinit var criticalListener: (Report) -> Unit
@@ -33,7 +34,11 @@ class DefaultNotifierTest {
     @Before
     fun setup() {
         Boots { configure { reporter = this@DefaultNotifierTest.reporter } }
+
         whenever(reporter.get(any())).thenReturn(Report(single("default"), idle()))
+        whenever(executor.isMainThreadSupported).thenReturn(false)
+
+        notifier.executor = executor
     }
 
     @Test

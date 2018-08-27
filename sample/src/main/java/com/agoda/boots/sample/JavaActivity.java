@@ -14,11 +14,12 @@ import rx.schedulers.Schedulers;
 
 import java.util.Arrays;
 
+import static com.agoda.boots.Key.all;
 import static com.agoda.boots.Logger.Level.DEBUG;
 
 public class JavaActivity extends AppCompatActivity {
 
-    private static final Key.Multiple KEY = Key.multiple(Keys.NETWORK, Keys.DATABASE, Keys.RANDOM);
+    private static final Key.All KEY = all();
 
     private ProgressBar mProgressBar;
     private TextView mTextView;

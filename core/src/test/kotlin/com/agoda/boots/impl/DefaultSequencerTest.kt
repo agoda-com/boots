@@ -18,13 +18,18 @@ import org.mockito.junit.MockitoJUnitRunner
 class DefaultSequencerTest {
 
     @Mock lateinit var reporter: Reporter
+    @Mock lateinit var executor: Executor
 
     private val sequencer = DefaultSequencer()
 
     @Before
     fun setup() {
         Boots { configure { reporter = this@DefaultSequencerTest.reporter } }
+
         whenever(reporter.get(any())).thenReturn(Report(single("default"), Status.idle()))
+        whenever(executor.isMainThreadSupported).thenReturn(false)
+
+        sequencer.executor = executor
     }
 
     @Test(expected = IncorrectConnectedBootException::class)
