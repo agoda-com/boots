@@ -20,20 +20,19 @@ object Boots {
     private var reporter: Reporter = DefaultReporter()
     private var notifier: Notifier = DefaultNotifier()
     private var sequencer: Sequencer = DefaultSequencer()
+    private var logger: Logger? = null
     private var isStrictMode = true
-
-    internal var logger: Logger? = null
-        private set
-
-    internal var isMainThreadSupported = false
-        get() = executor.isMainThreadSupported
-        private set
 
     private val boots = mutableListOf<Bootable>()
     private val lock = Any()
 
     private var capacity: Int = -1
 
+    init {
+        setExecutor()
+    }
+
+    @JvmStatic
     fun add(bootables: List<Bootable>) {
         synchronized(boots) {
             logger?.log(INFO, "Trying to add bootables: $bootables")
@@ -50,6 +49,7 @@ object Boots {
         }
     }
 
+    @JvmStatic
     fun configure(configuration: Configuration) {
         logger?.log(INFO, "Configuration started...")
 
@@ -84,11 +84,8 @@ object Boots {
                 Boots.isStrictMode = it
             }
 
-            logger?.let {
-                Boots.reporter.logger = it
-                Boots.notifier.logger = it
-                Boots.sequencer.logger = it
-            }
+            setLogger()
+            setExecutor()
         }
 
         logger?.log(INFO, "Configuration finished!")
@@ -98,9 +95,10 @@ object Boots {
         configure(Configuration().apply(configuration))
     }
 
+    @JvmStatic
     fun boot(key: Key, listener: Listener) {
         synchronized(lock) {
-            observe(key, listener)
+            subscribe(key, listener)
 
             logger?.log(INFO, "Building task for $key...")
             sequencer.start(key)
@@ -112,19 +110,33 @@ object Boots {
         }
     }
 
-    fun boot(key: Key, listener: Listener.() -> Unit) {
-        boot(key, Listener().apply(listener))
+    fun boot(key: Key, listener: Listener.() -> Unit) = Listener().apply(listener).also {
+        boot(key, it)
     }
 
-    fun observe(key: Key, listener: Listener) {
+    @JvmStatic
+    fun boot(key: Key, listener: Listener.Builder) = boot(key) {
+        onBoot = { listener.onBoot(it) }
+        onFailure = { listener.onFailure(it) }
+    }
+
+    @JvmStatic
+    fun subscribe(key: Key, listener: Listener) {
         logger?.log(INFO, "Listener for $key has been added")
         notifier.add(key, listener)
     }
 
-    fun observe(key: Key, listener: Listener.() -> Unit) {
-        observe(key, Listener().apply(listener))
+    fun subscribe(key: Key, listener: Listener.() -> Unit) = Listener().apply(listener).also {
+        subscribe(key, it)
     }
 
+    @JvmStatic
+    fun unsubscribe(key: Key, listener: Listener) {
+        logger?.log(INFO, "Listener $listener has been removed")
+        notifier.remove(key, listener)
+    }
+
+    @JvmStatic
     fun report(key: Key): Report {
         logger?.log(INFO, "Report for $key has been requested")
         return reporter.get(key)
@@ -134,7 +146,7 @@ object Boots {
         tail(this)
     }
 
-    internal fun reset () {
+    fun reset() {
         logger?.log(DEBUG, "reset() has been invoked! This function is for testing purposes only!")
 
         executor = DefaultExecutor()
@@ -234,6 +246,22 @@ object Boots {
         }
 
         logger?.log(INFO, "Verification completed!")
+    }
+
+    private fun setExecutor() {
+        executor.let {
+            reporter.executor = it
+            notifier.executor = it
+            sequencer.executor = it
+        }
+    }
+
+    private fun setLogger() {
+        logger.let {
+            reporter.logger = it
+            notifier.logger = it
+            sequencer.logger = it
+        }
     }
 
 }

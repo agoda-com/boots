@@ -7,6 +7,9 @@ ext.versions = [
         junit           : '4.12',
         mockito         : '2.21.0',
         mockitoKotlin   : '1.6.0',
+        espresso        : '3.0.2',
+        testRunner      : '1.0.2',
+        testRules       : '1.0.2',
         kakao           : '1.4.0',
         boots           : '0.0.1',
         bootsCode       : 1,
@@ -21,13 +24,16 @@ ext.gradlePlugins = [
 ]
 
 ext.libraries = [
-        kotlin          : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin",
+        kotlin          : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
         rx              : "io.reactivex:rxjava:$versions.rx",
         rxAndroid       : "io.reactivex:rxandroid:$versions.rxAndroid",
         appcompat       : "com.android.support:appcompat-v7:$versions.appcompat",
         junit           : "junit:junit:$versions.junit",
         mockito         : "org.mockito:mockito-core:$versions.mockito",
         mockitoKotlin   : "com.nhaarman:mockito-kotlin:$versions.mockitoKotlin",
+        espresso        : "com.android.support.test.espresso:espresso-core:$versions.espresso",
+        testRunner      : "com.android.support.test:runner:$versions.testRunner",
+        testRules       : "com.android.support.test:rules:$versions.testRules",
         kakao           : "com.agoda.kakao:kakao:$versions.kakao",
         kotlinTest      : "org.jetbrains.kotlin:kotlin-test-junit:$versions.kotlin",
 ]

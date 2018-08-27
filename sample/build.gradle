@@ -37,6 +37,12 @@ dependencies {
 
     implementation libraries.kotlin
     implementation libraries.appcompat
+    implementation libraries.rx
 
+    testImplementation libraries.junit
+
+    androidTestImplementation libraries.espresso
+    androidTestImplementation libraries.testRunner
+    androidTestImplementation libraries.testRules
     androidTestImplementation libraries.kakao
 }

@@ -100,28 +100,28 @@ class BootsTest {
     }
 
     @Test
-    fun testObserve() {
+    fun testSubscribe() {
         // Arrange
         val key = single("Key 1")
         val listener = Listener()
 
         // Act
-        Boots.observe(key, listener)
+        Boots.subscribe(key, listener)
 
         // Assert
         verify(notifier).add(key, listener)
     }
 
     @Test
-    fun testObserveDSL() {
+    fun testSubscribeDSL() {
         // Arrange
         val key = single("Key 1")
 
         // Act
-        Boots.observe(key) {}
+        val listener = Boots.subscribe(key) {}
 
         // Assert
-        verify(notifier).add(eq(key), any())
+        verify(notifier).add(key, listener)
     }
 
     @Test

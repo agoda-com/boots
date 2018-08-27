@@ -4,16 +4,16 @@ import com.agoda.boots.*
 import com.agoda.boots.Key.*
 import com.agoda.boots.Logger.Level.*
 import com.agoda.boots.Status.*
-import java.util.*
-import java.util.concurrent.LinkedBlockingQueue
 
 open class DefaultSequencer : Sequencer {
 
     override val boots: MutableMap<Key, Bootable> = mutableMapOf()
     override var logger: Logger? = null
 
-    protected val map = mutableMapOf<Key, Queue<Key>>()
-    protected val tasks = mutableListOf<Queue<Key>>()
+    override lateinit var executor: Executor
+
+    protected val map = mutableMapOf<Key, MutableList<Key>>()
+    protected val tasks = mutableListOf<MutableList<Key>>()
 
     override fun add(bootables: List<Bootable>) {
         verify(boots.values.plus(bootables))
@@ -23,34 +23,28 @@ open class DefaultSequencer : Sequencer {
     override fun start(key: Key) {
         synchronized(boots) {
             map[key] = when (key) {
-                is Single -> {
-                    LinkedBlockingQueue<Key>(boots.size).apply {
-                        addAll(resolve(critical()))
-                        addAll(resolve(listOf(boots[key]!!)))
-                    }
+                is Single -> mutableListOf<Key>().apply {
+                    addAll(resolve(critical()))
+                    addAll(resolve(listOf(boots[key]!!)))
                 }
-                is Multiple -> {
-                    LinkedBlockingQueue<Key>(boots.size).apply {
-                        addAll(resolve(critical()))
-                        addAll(resolve(multiple(key)))
-                    }
+                is Multiple -> mutableListOf<Key>().apply {
+                    addAll(resolve(critical()))
+                    addAll(resolve(multiple(key)))
                 }
-                is All -> {
-                    LinkedBlockingQueue<Key>(boots.size).apply {
-                        addAll(resolve(critical()))
-                        addAll(resolve(all()))
-                    }
+                is All -> mutableListOf<Key>().apply {
+                    addAll(resolve(critical()))
+                    addAll(resolve(all()))
                 }
                 is Critical -> resolve(critical())
             }
 
             logger?.let {
-                val queue = map[key]!!
+                val list = map[key]!!
                 val sb = StringBuilder()
 
-                queue.forEachIndexed { i, key ->
+                list.forEachIndexed { i, key ->
                     sb.append(key)
-                    if (i < queue.size - 1) sb.append(" -> ")
+                    if (i < list.size - 1) sb.append(" -> ")
                 }
 
                 it.log(DEBUG, "Resolved: $sb")
@@ -73,19 +67,21 @@ open class DefaultSequencer : Sequencer {
             finished?.let { update(it) }
 
             for (task in tasks) {
-                val bootable = boots[task.peek()]
+                for (key in task) {
+                    val bootable = boots[key]
 
-                if (bootable != null) {
-                    logger?.log(DEBUG, "Checking ${bootable.key}...")
+                    if (bootable != null) {
+                        logger?.log(DEBUG, "Checking ${bootable.key}...")
 
-                    if (check(bootable)) {
-                        return bootable.also {
-                            logger?.log(DEBUG, "Check of ${it.key} has passed!")
-                            task.poll()
-                            if (task.isEmpty()) tasks.remove(task)
+                        if (check(bootable)) {
+                            return bootable.also {
+                                logger?.log(DEBUG, "Check of ${it.key} has passed!")
+                                task.remove(key)
+                                if (task.isEmpty()) tasks.remove(task)
+                            }
+                        } else {
+                            logger?.log(DEBUG, "Check hasn't passed, moving next...")
                         }
-                    } else {
-                        logger?.log(DEBUG, "Check hasn't passed, moving next...")
                     }
                 }
             }
@@ -95,17 +91,17 @@ open class DefaultSequencer : Sequencer {
         }
     }
 
-    protected fun resolve(bootables: List<Bootable>): Queue<Key> {
-        val queue = LinkedBlockingQueue<Key>(boots.size)
+    protected fun resolve(bootables: List<Bootable>): MutableList<Key> {
+        val list = mutableListOf<Key>()
         val visited = mutableMapOf<Key, Boolean>()
 
         boots.forEach { visited[it.key] = false }
-        bootables.forEach { if (visited[it.key] == false) visit(it.key, visited, queue) }
+        bootables.forEach { if (visited[it.key] == false) visit(it.key, visited, list) }
 
-        return queue
+        return list
     }
 
-    protected fun visit(key: Key, visited: MutableMap<Key, Boolean>, queue: Queue<Key>) {
+    protected fun visit(key: Key, visited: MutableMap<Key, Boolean>, list: MutableList<Key>) {
         visited[key] = true
 
         val boot = boots[key]!!
@@ -113,10 +109,10 @@ open class DefaultSequencer : Sequencer {
 
         if (status !is Booted) {
             if (boot.dependencies.isEmpty()) {
-                queue.add(key)
+                list.add(key)
             } else {
-                boot.dependencies.forEach { if (visited[it] == false) visit(it, visited, queue) }
-                queue.add(key)
+                boot.dependencies.forEach { if (visited[it] == false) visit(it, visited, list) }
+                list.add(key)
             }
         }
     }
@@ -152,7 +148,7 @@ open class DefaultSequencer : Sequencer {
     }
 
     private fun verify(bootables: List<Bootable>) {
-        if (Boots.isMainThreadSupported) {
+        if (executor.isMainThreadSupported) {
             return
         }
 

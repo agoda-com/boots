@@ -6,7 +6,7 @@ import rx.Completable
 import rx.Scheduler
 import rx.android.schedulers.AndroidSchedulers
 
-class RxAndroidExecutor(
+class RxAndroidExecutor @JvmOverloads constructor(
         private val scheduler: Scheduler,
         override val capacity: Int = DefaultExecutor.DEFAULT_CAPACITY
 ) : Executor {

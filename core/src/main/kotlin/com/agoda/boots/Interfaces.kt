@@ -14,6 +14,7 @@ interface Reporter : Holder {
 interface Notifier : Holder {
     fun add(key: Key, listener: Listener)
     fun notify(key: Key.Single, report: Report)
+    fun remove(key: Key, listener: Listener)
 }
 
 interface Sequencer : Holder {
@@ -24,6 +25,7 @@ interface Sequencer : Holder {
 
 interface Holder {
     val boots: MutableMap<Key, Bootable>
+    var executor: Executor
     var logger: Logger?
 
     fun add(bootables: List<Bootable>) {
@@ -35,7 +37,6 @@ interface Holder {
     fun multiple(key: Key.Multiple) = boots.values.filter { key.contains(it.key) }
     fun critical() = boots.values.filter { it.isCritical }
     fun all() = boots.values.toList()
-
 }
 
 interface Logger {

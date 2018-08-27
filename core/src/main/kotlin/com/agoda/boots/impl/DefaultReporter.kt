@@ -14,6 +14,8 @@ open class DefaultReporter : Reporter {
     override val boots: MutableMap<Key, Bootable> = mutableMapOf()
     override var logger: Logger? = null
 
+    override lateinit var executor: Executor
+
     protected val reports = mutableMapOf<Key.Single, Report>()
 
     override fun set(key: Key.Single, status: Status, start: Long, time: Long): Report {

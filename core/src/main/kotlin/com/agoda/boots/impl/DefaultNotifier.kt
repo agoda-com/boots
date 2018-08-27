@@ -6,9 +6,10 @@ import com.agoda.boots.Status.Booted
 import com.agoda.boots.Status.Failed
 
 open class DefaultNotifier : Notifier {
-
     override val boots: MutableMap<Key, Bootable> = mutableMapOf()
     override var logger: Logger? = null
+
+    override lateinit var executor: Executor
 
     protected val listeners = mutableMapOf<Key, MutableList<Listener>>()
 
@@ -41,10 +42,24 @@ open class DefaultNotifier : Notifier {
         }
     }
 
+    override fun remove(key: Key, listener: Listener) {
+        synchronized(listeners) {
+            listeners[key]?.remove(listener)
+        }
+    }
+
     private fun notify(report: Report, listeners: MutableList<Listener>) {
         when (report.status) {
-            is Booted -> listeners.forEach { it.onBoot(report) }
-            is Failed -> listeners.forEach { it.onFailure(report) }
+            is Booted -> if (executor.isMainThreadSupported) {
+                listeners.forEach { executor.execute(false) { it.onBoot(report) } }
+            } else {
+                listeners.forEach { it.onBoot(report) }
+            }
+            is Failed -> if (executor.isMainThreadSupported) {
+                listeners.forEach { executor.execute(false) { it.onFailure(report) } }
+            } else {
+                listeners.forEach { it.onFailure(report) }
+            }
         }
 
         listeners.clear()
