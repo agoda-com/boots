@@ -185,9 +185,10 @@ object Boots {
                         return@let
                     }
 
-                    capacity--
-
                     logger?.log(DEBUG, "${it.key} can be executed, passing to executor...")
+
+                    capacity--
+                    reporter.set(it.key, booting())
 
                     executor.execute(it.isConcurrent) {
                         logger?.log(INFO, "Bootable ${it.key} is starting boot process...")
