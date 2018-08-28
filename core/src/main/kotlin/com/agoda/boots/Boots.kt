@@ -24,7 +24,6 @@ object Boots {
     private var isStrictMode = true
 
     private val boots = mutableListOf<Bootable>()
-    private val lock = Any()
 
     private var capacity: Int = -1
 
@@ -51,44 +50,46 @@ object Boots {
 
     @JvmStatic
     fun configure(configuration: Configuration) {
-        logger?.log(INFO, "Configuration started...")
+        synchronized(boots) {
+            logger?.log(INFO, "Configuration started...")
 
-        with (configuration) {
-            logger?.let {
-                logger?.log(DEBUG, "Setting custom logger: $it")
-                Boots.logger = it
+            with(configuration) {
+                logger?.let {
+                    logger?.log(DEBUG, "Setting custom logger: $it")
+                    Boots.logger = it
+                }
+
+                executor?.let {
+                    logger?.log(DEBUG, "Setting custom executor: $it")
+                    Boots.executor = it
+                }
+
+                reporter?.let {
+                    logger?.log(DEBUG, "Setting custom reporter: $it")
+                    Boots.reporter = it
+                }
+
+                notifier?.let {
+                    logger?.log(DEBUG, "Setting custom notifier: $it")
+                    Boots.notifier = it
+                }
+
+                sequencer?.let {
+                    logger?.log(DEBUG, "Setting custom sequencer: $it")
+                    Boots.sequencer = it
+                }
+
+                isStrictMode?.let {
+                    logger?.log(DEBUG, "Overriding strict mode: $it")
+                    Boots.isStrictMode = it
+                }
+
+                setLogger()
+                setExecutor()
             }
 
-            executor?.let {
-                logger?.log(DEBUG, "Setting custom executor: $it")
-                Boots.executor = it
-            }
-
-            reporter?.let {
-                logger?.log(DEBUG, "Setting custom reporter: $it")
-                Boots.reporter = it
-            }
-
-            notifier?.let {
-                logger?.log(DEBUG, "Setting custom notifier: $it")
-                Boots.notifier = it
-            }
-
-            sequencer?.let {
-                logger?.log(DEBUG, "Setting custom sequencer: $it")
-                Boots.sequencer = it
-            }
-
-            isStrictMode?.let {
-                logger?.log(DEBUG, "Overriding strict mode: $it")
-                Boots.isStrictMode = it
-            }
-
-            setLogger()
-            setExecutor()
+            logger?.log(INFO, "Configuration finished!")
         }
-
-        logger?.log(INFO, "Configuration finished!")
     }
 
     fun configure(configuration: Configuration.() -> Unit) {
@@ -97,7 +98,7 @@ object Boots {
 
     @JvmStatic
     fun boot(key: Key, listener: Listener) {
-        synchronized(lock) {
+        synchronized(boots) {
             subscribe(key, listener)
 
             logger?.log(INFO, "Building task for $key...")
@@ -147,21 +148,23 @@ object Boots {
     }
 
     fun reset() {
-        logger?.log(DEBUG, "reset() has been invoked! This function is for testing purposes only!")
+        synchronized(boots) {
+            logger?.log(DEBUG, "reset() has been invoked! This function is for testing purposes only!")
 
-        executor = DefaultExecutor()
-        reporter = DefaultReporter()
-        notifier = DefaultNotifier()
-        sequencer = DefaultSequencer()
-        logger = null
-        isStrictMode = true
+            executor = DefaultExecutor()
+            reporter = DefaultReporter()
+            notifier = DefaultNotifier()
+            sequencer = DefaultSequencer()
+            logger = null
+            isStrictMode = true
 
-        boots.clear()
-        capacity = -1
+            boots.clear()
+            capacity = -1
+        }
     }
 
     private fun boot(finished: Report?) {
-        synchronized(lock) {
+        synchronized(boots) {
             if (capacity == -1) {
                 capacity = executor.capacity
             } else {
@@ -265,6 +268,3 @@ object Boots {
     }
 
 }
-
-
-

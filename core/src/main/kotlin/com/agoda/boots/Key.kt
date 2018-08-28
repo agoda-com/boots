@@ -44,10 +44,17 @@ sealed class Key {
     }
 
     companion object {
-        @JvmStatic fun single(id: String = "") = Key.Single(id)
-        @JvmStatic fun multiple(vararg keys: Key.Single = emptyArray()) = Key.Multiple(keys.toSet())
-        @JvmStatic fun critical() = Key.Critical()
-        @JvmStatic fun all() = Key.All()
+        @JvmStatic
+        fun single(id: String = "") = Key.Single(id)
+
+        @JvmStatic
+        fun multiple(vararg keys: Key.Single = emptyArray()) = Key.Multiple(keys.toSet())
+
+        @JvmStatic
+        fun critical() = Key.Critical()
+
+        @JvmStatic
+        fun all() = Key.All()
     }
 
 }

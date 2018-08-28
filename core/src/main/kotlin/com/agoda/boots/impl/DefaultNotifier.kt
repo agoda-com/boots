@@ -6,6 +6,7 @@ import com.agoda.boots.Status.Booted
 import com.agoda.boots.Status.Failed
 
 open class DefaultNotifier : Notifier {
+
     override val boots: MutableMap<Key, Bootable> = mutableMapOf()
     override var logger: Logger? = null
 
