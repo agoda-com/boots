@@ -1,5 +1,11 @@
 package com.agoda.boots
 
+/**
+ * Configuration is used to provide a custom component to the [Boots].
+ * By default, all fields are null. When you provide a configuration with
+ * some actual values to [configure()][Boots.configure], only non-null
+ * will be used to replace current ones.
+ */
 class Configuration {
 
     var executor: Executor? = null
@@ -9,6 +15,9 @@ class Configuration {
     var logger: Logger? = null
     var isStrictMode: Boolean? = null
 
+    /**
+     * Builder is presented to support Java style configuration.
+     */
     class Builder {
         private var executor: Executor? = null
         private var reporter: Reporter? = null

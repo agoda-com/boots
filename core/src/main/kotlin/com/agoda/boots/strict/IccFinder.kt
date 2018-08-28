@@ -5,7 +5,7 @@ import com.agoda.boots.Key
 
 /**
  * This class is used to determine ICC (Incorrect connected components) in the
- * [Bootable]'s dependency tree every time you invoke [Boots.add()][com.agoda.boots.Boots.add].
+ * [Bootable]'s dependency tree every time you invoke [add()][com.agoda.boots.Boots.add].
  *
  * As of now, ICC is considered to be:
  * - Bootable with [Bootable.isCritical] flag set to `true` which is dependent

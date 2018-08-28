@@ -6,7 +6,7 @@ import java.util.*
 
 /**
  * This class is used to determine SCC (Strong connected components) in the
- * [Bootable]'s dependency tree every time you invoke [Boots.add()][com.agoda.boots.Boots.add].
+ * [Bootable]'s dependency tree every time you invoke [add()][com.agoda.boots.Boots.add].
  *
  * It's implementation is based on Tarjan algorithm of finding SCCs in directed graph.
  */
