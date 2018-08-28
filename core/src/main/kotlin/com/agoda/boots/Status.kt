@@ -1,32 +1,32 @@
 package com.agoda.boots
 
 /**
- * Represents the status of a given [Bootable] within the boot system.
+ * Represents the status of a given [bootable][Bootable] within the boot system.
  * Status is returned as a property of [Report] data class returned by the
- * [Boots.report].
+ * [report()][Boots.report].
  */
 sealed class Status {
 
     /**
-     * Idle status means that [Bootable] hasn't been touched yet by the boot system.
-     * All freshly added [Bootables][Bootable] through [add()][Boots.add] get the idle status automatically.
+     * Idle status means that [bootable][Bootable] hasn't been touched yet by the boot system.
+     * All freshly added [bootables][Bootable] through [add()][Boots.add] get the idle status automatically.
      */
     class Idle : Status()
 
     /**
-     * Booting status means that [Bootable] has been added to the [Executor]'s queue and will
+     * Booting status means that [bootable][Bootable] has been added to the [executor][Executor]'s queue and will
      * start executing/executing right now.
      */
     class Booting : Status()
 
     /**
-     * Booted status means that [Bootable] has finished it's [boot()][Bootable.boot] invocation
+     * Booted status means that [bootable][Bootable] has finished it's [boot()][Bootable.boot] invocation
      * without throwing any exception, thus meaning that it has booted successfully.
      */
     class Booted : Status()
 
     /**
-     * Failed status means that [Bootable] threw an exception during [boot()][Bootable.boot]
+     * Failed status means that [bootable][Bootable] threw an exception during [boot()][Bootable.boot]
      * invocation, thus meaning that it hasn't booted successfully.
      *
      * @param reason exception that the [boot()][Bootable.boot] function has thrown.

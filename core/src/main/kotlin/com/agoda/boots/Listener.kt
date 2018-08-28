@@ -15,7 +15,7 @@ class Listener {
     var onFailure: (Report) -> Unit = {}
 
     /**
-     * Interface providing Java style means to easily instantiate [Listener] via
+     * Interface providing Java style means to easily instantiate [listener][Listener] via
      * anonymous inner classes.
      */
     interface Builder {

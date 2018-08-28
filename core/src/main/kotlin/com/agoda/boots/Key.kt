@@ -1,15 +1,15 @@
 package com.agoda.boots
 
 /**
- * This class is used to distinct [Bootables][Bootable] in the boot system.
+ * This class is used to distinct [bootables][Bootable] in the boot system.
  * Primary goal of a separate class like that is to avoid the need of having
- * direct access to [Bootable] instances, instead allowing it to be provided/injected
- * by any other means while operating with [Keys][Key], which are lightweight and easy to declare.
+ * direct access to [bootable][Bootable] instances, instead allowing it to be provided/injected
+ * by any other means while operating with [keys][Key], which are lightweight and easy to declare.
  */
 sealed class Key {
 
     /**
-     * Single key. Marks specific [Bootable] in the system.
+     * Single key. Marks specific [bootable][Bootable] in the system.
      * @param id unique identifier of a key
      */
     class Single(val id: String) : Key() {
@@ -19,8 +19,8 @@ sealed class Key {
     }
 
     /**
-     * Multiple key. Marks a set of [Single] keys.
-     * @param keys set of [Single] keys
+     * Multiple key. Marks a set of [single][Single] keys.
+     * @param keys set of [single][Single] keys
      */
     class Multiple(private val keys: Set<Single>) : Key(), Set<Single> {
         override val size = keys.size
@@ -44,13 +44,13 @@ sealed class Key {
 
         /**
          * Checks if this key is not empty
-         * @return true if this key contains one or more [Single] key.
+         * @return true if this key contains one or more [single][Single] key.
          */
         fun isNotEmpty() = keys.isNotEmpty()
     }
 
     /**
-     * Critical key. Used to select all [Bootables][Bootable] that have their
+     * Critical key. Used to select all [bootables][Bootable] that have their
      * [isCritical][Bootable.isCritical] flag set to `true`
      */
     class Critical : Key() {
@@ -60,7 +60,7 @@ sealed class Key {
     }
 
     /**
-     * All key. Used to select all available [Bootables][Bootable] in the system.
+     * All key. Used to select all available [bootables][Bootable] in the system.
      */
     class All : Key() {
         override fun hashCode() = "ALL".hashCode()
@@ -79,7 +79,7 @@ sealed class Key {
 
         /**
          * Creates an instance of [Multiple] key.
-         * @param keys [Single] keys that form current instance
+         * @param keys [single][Single] keys that form current instance
          * @return instance of [Multiple]
          */
         @JvmStatic
