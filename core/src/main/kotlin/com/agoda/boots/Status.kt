@@ -9,7 +9,7 @@ sealed class Status {
 
     /**
      * Idle status means that [Bootable] hasn't been touched yet by the boot system.
-     * All freshly added [Bootable]s through [add()][Boots.add] get the idle status automatically.
+     * All freshly added [Bootables][Bootable] through [add()][Boots.add] get the idle status automatically.
      */
     class Idle : Status()
 
