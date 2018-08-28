@@ -9,7 +9,7 @@ sealed class Status {
 
     /**
      * Idle status means that [Bootable] hasn't been touched yet by the boot system.
-     * All freshly added [Bootable]s through [Boots.add] get the idle status automatically.
+     * All freshly added [Bootable]s through [add()][Boots.add] get the idle status automatically.
      */
     class Idle : Status()
 
@@ -20,16 +20,16 @@ sealed class Status {
     class Booting : Status()
 
     /**
-     * Booted status means that [Bootable] has finished it's [Bootable.boot] invocation
+     * Booted status means that [Bootable] has finished it's [boot()][Bootable.boot] invocation
      * without throwing any exception, thus meaning that it has booted successfully.
      */
     class Booted : Status()
 
     /**
-     * Failed status means that [Bootable] threw an exception during [Bootable.boot]
+     * Failed status means that [Bootable] threw an exception during [boot()][Bootable.boot]
      * invocation, thus meaning that it hasn't booted successfully.
      *
-     * @param reason exception that the [Bootable.boot] function has thrown.
+     * @param reason exception that the [boot()][Bootable.boot] function has thrown.
      */
     class Failed(val reason: Throwable) : Status()
 
@@ -57,7 +57,7 @@ sealed class Status {
 
         /**
          * Creates an instance of [Failed] status
-         * @param throwable reason of failure
+         * @param reason reason of failure
          * @return instance of [Failed]
          */
         @JvmStatic
