@@ -25,9 +25,9 @@ open class DefaultNotifier : Notifier {
     }
 
     override fun notify(key: Key.Single, report: Report) {
-        logger?.log(DEBUG, "Got report from ${report.key}, looking for listeners to invoke...")
-
         synchronized(listeners) {
+            logger?.log(DEBUG, "Got report from ${report.key}, looking for listeners to invoke...")
+            
             listeners[key]?.let {
                 logger?.log(DEBUG, "Listeners of ${report.key} are ready to be notified, invoking...")
                 notify(report, it)
