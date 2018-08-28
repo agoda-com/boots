@@ -113,7 +113,7 @@ class BootsTest {
     }
 
     @Test
-    fun testSubscribeDSL() {
+    fun testSubscribeDsl() {
         // Arrange
         val key = single("Key 1")
 
