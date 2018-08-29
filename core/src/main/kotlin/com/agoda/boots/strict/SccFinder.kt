@@ -9,6 +9,8 @@ import java.util.*
  * [Bootable]'s dependency tree every time you invoke [add()][com.agoda.boots.Boots.add].
  *
  * It's implementation is based on Tarjan algorithm of finding SCCs in directed graph.
+ *
+ * @param boots list of bootables to process
  */
 class SccFinder(private val boots: List<Bootable>) {
 

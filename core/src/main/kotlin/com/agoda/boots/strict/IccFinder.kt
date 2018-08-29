@@ -10,6 +10,8 @@ import com.agoda.boots.Key
  * As of now, ICC is considered to be:
  * - Bootable with [Bootable.isCritical] flag set to `true` which is dependent
  *   on a bootable with [Bootable.isCritical] flag set to `false`
+ *
+ * @param boots list of bootables to process
  */
 class IccFinder(private val boots: List<Bootable>) {
 

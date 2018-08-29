@@ -3,6 +3,7 @@ package com.agoda.boots
 /**
  * Exception that aggregates the reasons of failure in case a [report][Report] has
  * a [failed][Status.Failed] state and is not with [single][Key.Single] key.
+ * @param reasons map of throwables associated with keys of bootables that threw it.
  */
 class BootException(reasons: Map<Key, Throwable>) : Throwable() {
     override val message = StringBuilder().apply {

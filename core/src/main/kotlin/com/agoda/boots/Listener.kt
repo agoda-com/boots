@@ -2,16 +2,11 @@ package com.agoda.boots
 
 /**
  * Callback class to listen results of a boot process.
+ * @property onBoot function that is invoked when boot process has finished successfully
+ * @property onFailure function that is invoked when boot process hasn't finished successfully
  */
 class Listener {
-    /**
-     * This function is invoked when boot process has finished successfully.
-     */
     var onBoot: (Report) -> Unit = {}
-
-    /**
-     * This function is invoked when boot process hasn't finished successfully.
-     */
     var onFailure: (Report) -> Unit = {}
 
     /**
