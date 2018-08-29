@@ -5,6 +5,15 @@ import com.agoda.boots.Logger.Level.*
 import com.agoda.boots.Status.Booted
 import com.agoda.boots.Status.Failed
 
+/**
+ * Default implementation of [Notifier].
+ *
+ * Implementation is very simple and straightforward. It stores all listeners
+ * in a map, and on status change looks for single key match first, then checks
+ * all other listeners if they can be invoked and if can, invoke and remove them.
+ * All calls are synchronous.
+ * @property listeners container of listeners
+ */
 open class DefaultNotifier : Notifier {
 
     override val boots: MutableMap<Key, Bootable> = mutableMapOf()
@@ -27,7 +36,7 @@ open class DefaultNotifier : Notifier {
     override fun notify(key: Key.Single, report: Report) {
         synchronized(listeners) {
             logger?.log(DEBUG, "Got report from ${report.key}, looking for listeners to invoke...")
-            
+
             listeners[key]?.let {
                 logger?.log(DEBUG, "Listeners of ${report.key} are ready to be notified, invoking...")
                 notify(report, it)
