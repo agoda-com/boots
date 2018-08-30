@@ -9,6 +9,17 @@ import com.agoda.boots.Status.Companion.failed
 import com.agoda.boots.Status.Companion.idle
 import com.agoda.boots.Status.Failed
 
+/**
+ * Default implementation of [Reporter]
+ *
+ * Implementation is very simple and straightforward. It stores all reports
+ * for [single][Key.Single] bootables in a map and inserts/updates (by copy)
+ * on every [set()][Reporter.set] invocation.
+ *
+ * When getting the report, it looks up the map if the requested key is [single][Key.Single],
+ * otherwise it generates new combined report on every request.
+ * @property reports container of [single][Key.Single] reports.
+ */
 open class DefaultReporter : Reporter {
 
     override val boots: MutableMap<Key, Bootable> = mutableMapOf()
@@ -20,6 +31,8 @@ open class DefaultReporter : Reporter {
 
     override fun set(key: Key.Single, status: Status, start: Long, time: Long): Report {
         synchronized(reports) {
+            logger?.log(DEBUG, "Report update for $key. Status: $status, start time: $start, time: $time")
+
             val report = if (!reports.contains(key)) {
                 Report(key, status, start, time)
             } else {
