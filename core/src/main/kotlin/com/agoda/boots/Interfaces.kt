@@ -16,6 +16,10 @@ interface Executor {
      * @param executable function to invoke
      */
     fun execute(isConcurrent: Boolean, executable: () -> Unit)
+
+    companion object {
+        const val DEFAULT_CAPACITY = 4
+    }
 }
 
 /**

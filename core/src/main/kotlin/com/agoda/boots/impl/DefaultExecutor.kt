@@ -1,6 +1,7 @@
 package com.agoda.boots.impl
 
 import com.agoda.boots.Executor
+import com.agoda.boots.Executor.Companion.DEFAULT_CAPACITY
 import java.util.concurrent.*
 
 /**
@@ -29,10 +30,6 @@ open class DefaultExecutor @JvmOverloads constructor(
         } else {
             executable()
         }
-    }
-
-    companion object {
-        const val DEFAULT_CAPACITY = 4
     }
 
 }
