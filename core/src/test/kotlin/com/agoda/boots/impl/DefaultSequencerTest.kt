@@ -18,7 +18,6 @@ import org.mockito.junit.MockitoJUnitRunner
 class DefaultSequencerTest {
 
     @Mock lateinit var reporter: Reporter
-    @Mock lateinit var executor: Executor
 
     private val sequencer = DefaultSequencer()
 
@@ -27,28 +26,6 @@ class DefaultSequencerTest {
         Boots { configure { reporter = this@DefaultSequencerTest.reporter } }
 
         whenever(reporter.get(any())).thenReturn(Report(single("default"), Status.idle()))
-        whenever(executor.isMainThreadSupported).thenReturn(false)
-
-        sequencer.executor = executor
-    }
-
-    @Test(expected = IncorrectConnectedBootException::class)
-    fun testVerifyFailure() {
-        // Arrange
-        val bootable1 = object : Bootable() {
-            override val key = single("Key 1")
-            override fun boot() {}
-        }
-
-        val bootable2 = object : Bootable() {
-            override val key = single("Key 2")
-            override val dependencies = multiple(single("Key 1"))
-            override val isConcurrent = false
-            override fun boot() {}
-        }
-
-        // Act
-        sequencer.add(listOf(bootable1, bootable2))
     }
 
     @Test

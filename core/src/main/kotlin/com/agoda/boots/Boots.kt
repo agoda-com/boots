@@ -229,7 +229,7 @@ object Boots {
         logger?.log(INFO, "Verification started!")
         logger?.log(DEBUG, "Trying to find incorrect connected components...")
 
-        val iccs = IccFinder(bootables).find()
+        val iccs = IccFinder(bootables, executor.isMainThreadSupported).find()
 
         if (iccs.isNotEmpty()) {
             val exception = IncorrectConnectedBootException(iccs)

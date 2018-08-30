@@ -23,13 +23,38 @@ class IccFinderTest {
         }
 
         // Act
-        val results = IccFinder(listOf(bootable1, bootable2)).find()
+        val results = IccFinder(listOf(bootable1, bootable2), false).find()
 
         // Assert
         assert(results.isNotEmpty())
         assert(results.first().first == single("Bootable 2"))
         assert(results.first().second == single("Bootable 1"))
     }
+
+    @Test
+    fun testHasIccThreads() {
+        // Arrange
+        val bootable1 = object : Bootable() {
+            override val key = single("Bootable 1")
+            override fun boot() {}
+        }
+
+        val bootable2 = object : Bootable() {
+            override val key = single("Bootable 2")
+            override val dependencies = multiple(single("Bootable 1"))
+            override val isConcurrent = false
+            override fun boot() {}
+        }
+
+        // Act
+        val results = IccFinder(listOf(bootable1, bootable2), false).find()
+
+        // Assert
+        assert(results.isNotEmpty())
+        assert(results.first().first == single("Bootable 2"))
+        assert(results.first().second == single("Bootable 1"))
+    }
+
 
     @Test
     fun testHasNoIcc() {
@@ -46,7 +71,7 @@ class IccFinderTest {
         }
 
         // Act
-        val results = IccFinder(listOf(bootable1, bootable2)).find()
+        val results = IccFinder(listOf(bootable1, bootable2), false).find()
 
         // Assert
         assert(results.isEmpty())

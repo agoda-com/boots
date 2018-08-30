@@ -5,6 +5,22 @@ import com.agoda.boots.Key.*
 import com.agoda.boots.Logger.Level.*
 import com.agoda.boots.Status.*
 
+/**
+ * Default implementation of [Sequencer].
+ *
+ * Implementation is very simple and straightforward. It calculates list of
+ * bootables in a dependency-sorted order for every [start()][Sequencer.start]
+ * request as a separate task. By default it adds all non-booted [critical][Bootable.isCritical]
+ * bootables in front of any other to ensure that critical bootables are booted ASAP.
+ *
+ * On every [next()] invocation it goes through tasks lists and for every task
+ * it tries to iterate through all of it's bootables to check if any of it is
+ * qualified to be invoked. Boot qualification requirements can be found at [check()][check] function.
+ *
+ * Also it will verify all added bootables
+ * @property map container of boot tasks
+ * @property tasks container of boot tasks in FIFO ordering
+ */
 open class DefaultSequencer : Sequencer {
 
     override val boots: MutableMap<Key, Bootable> = mutableMapOf()
@@ -14,11 +30,6 @@ open class DefaultSequencer : Sequencer {
 
     protected val map = mutableMapOf<Key, MutableList<Key>>()
     protected val tasks = mutableListOf<MutableList<Key>>()
-
-    override fun add(bootables: List<Bootable>) {
-        verify(boots.values.plus(bootables))
-        super.add(bootables)
-    }
 
     override fun start(key: Key) {
         synchronized(boots) {
@@ -91,6 +102,12 @@ open class DefaultSequencer : Sequencer {
         }
     }
 
+    /**
+     * Builds the boot task based on the list of bootables that has to be booted.
+     * Function resolves and adds required dependencies to the provided list.
+     * @param bootables list of bootables that are required to boot
+     * @return list of bootables that will satisfy the requirement
+     */
     protected fun resolve(bootables: List<Bootable>): MutableList<Key> {
         val list = mutableListOf<Key>()
         val visited = mutableMapOf<Key, Boolean>()
@@ -98,9 +115,16 @@ open class DefaultSequencer : Sequencer {
         boots.forEach { visited[it.key] = false }
         bootables.forEach { if (visited[it.key] == false) visit(it.key, visited, list) }
 
-        return list
+        return list.toMutableList()
     }
 
+    /**
+     * Checks the bootable dependencies in a recursive manner and adds them before
+     * adding bootable itself to the task.
+     * @param key identifier of bootable
+     * @param visited map with already checked flags
+     * @param list task where keys will be added
+     */
     protected fun visit(key: Key, visited: MutableMap<Key, Boolean>, list: MutableList<Key>) {
         visited[key] = true
 
@@ -109,14 +133,22 @@ open class DefaultSequencer : Sequencer {
 
         if (status !is Booted) {
             if (boot.dependencies.isEmpty()) {
-                list.add(key)
+                if (!list.contains(key)) list.add(key)
             } else {
                 boot.dependencies.forEach { if (visited[it] == false) visit(it, visited, list) }
-                list.add(key)
+                if (!list.contains(key)) list.add(key)
             }
         }
     }
 
+    /**
+     * Updates the tasks based on the information of incoming report.
+     * If report says that some bootable is booted, that bootable is removed
+     * from all tasks.
+     * If report says that some bootable is failed and if that bootable is [critical][Bootable.isCritical]
+     * then all tasks containing this bootable will be cleared and cancelled (all tasks as of now).
+     * @param report updated report of [single][Key.Single] bootable
+     */
     protected fun update(report: Report) {
         if (report.status is Booted) {
             map.values.forEach { it.remove(report.key) }
@@ -134,6 +166,15 @@ open class DefaultSequencer : Sequencer {
         }
     }
 
+    /**
+     * To be qualified for boot, bootable should meet following requirements:
+     * - if bootable is [critical][Bootable.isCritical]:
+     *   it should not have dependencies or it's dependencies should have already [booted][Status.Booted]
+     * - if bootable is not [critical][Bootable.isCritical]:
+     *   critical bootables should be loaded `AND` it should not have dependencies or it's
+     *   dependencies should have already [booted][Status.Booted]
+     * @return `true` if bootable is qualified to be booted, `false` otherwise
+     */
     protected fun check(bootable: Bootable): Boolean {
         val critical = bootable.isCritical
         val empty = bootable.dependencies.isEmpty()
@@ -145,32 +186,6 @@ open class DefaultSequencer : Sequencer {
             val cb = Boots.report(Key.critical()).status is Booted
             cb and (empty or booted)
         }
-    }
-
-    private fun verify(bootables: List<Bootable>) {
-        if (executor.isMainThreadSupported) {
-            return
-        }
-
-        logger?.log(INFO, "Verifying that non-concurrent bootables are not dependent on concurrent ones")
-
-        val results = mutableListOf<Pair<Key, Key>>()
-
-        bootables.filter {
-            it.dependencies.isNotEmpty() && !it.isConcurrent
-        }.forEach { boot ->
-            boot.dependencies.forEach { key ->
-                if (bootables.find { it.key == key }!!.isConcurrent) {
-                    results.add(boot.key to key)
-                }
-            }
-        }
-
-        if (results.isNotEmpty()) {
-            throw IncorrectConnectedBootException(results)
-        }
-
-        logger?.log(INFO, "Verification complete!")
     }
 
 }

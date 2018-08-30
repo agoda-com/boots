@@ -10,10 +10,14 @@ import com.agoda.boots.Key
  * As of now, ICC is considered to be:
  * - Bootable with [Bootable.isCritical] flag set to `true` which is dependent
  *   on a bootable with [Bootable.isCritical] flag set to `false`
- *
+ * - Bootable with [Bootable.isConcurrent] flag set to `false` which is dependent
+ *   on a bootable with [Bootable.isCritical] flag set to `true` and system's
+ *   [Executor.isMainThreadSupported][com.agoda.boots.Executor.isMainThreadSupported]
+ *   is `false`
  * @param boots list of bootables to process
+ * @param isMainThreadSupported flag indicating if switching to main thread's context is supported
  */
-class IccFinder(private val boots: List<Bootable>) {
+class IccFinder(private val boots: List<Bootable>, private val isMainThreadSupported: Boolean) {
 
     /**
      * Determines if given [Bootable] set contains ICC
@@ -32,6 +36,18 @@ class IccFinder(private val boots: List<Bootable>) {
 
                 if (!dependency.isCritical) {
                     results.add(critical.key to key)
+                }
+            }
+        }
+
+        if (!isMainThreadSupported) {
+            boots.filter {
+                it.dependencies.isNotEmpty() && !it.isConcurrent
+            }.forEach { boot ->
+                boot.dependencies.forEach { key ->
+                    if (boots.find { it.key == key }!!.isConcurrent) {
+                        results.add(boot.key to key)
+                    }
                 }
             }
         }
