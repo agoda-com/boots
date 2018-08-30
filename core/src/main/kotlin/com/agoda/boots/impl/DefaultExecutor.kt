@@ -15,7 +15,9 @@ import java.util.concurrent.*
  *
  * @see DefaultSequencer
  */
-open class DefaultExecutor(override val capacity: Int = DEFAULT_CAPACITY) : Executor {
+open class DefaultExecutor @JvmOverloads constructor(
+        override val capacity: Int = DEFAULT_CAPACITY
+) : Executor {
 
     override val isMainThreadSupported = false
 
