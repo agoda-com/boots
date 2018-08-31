@@ -5,6 +5,14 @@ package com.agoda.boots
  * By default, all fields are null. When you provide a configuration with
  * some actual values to [configure()][Boots.configure], only non-null
  * will be used to replace current ones.
+ *
+ * @property executor instance of [Executor]
+ * @property reporter instance of [Reporter]
+ * @property notifier instance of [Notifier]
+ * @property sequencer instance of [Sequencer]
+ * @property logger instance of [Logger]
+ * @property isStrictMode Library throws exception when ICC (incorrect connected components) are added
+ *                        if this flag is set to `true`. Default is `true`.
  */
 class Configuration {
 

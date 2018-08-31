@@ -14,6 +14,18 @@ import com.agoda.boots.impl.DefaultSequencer
 import com.agoda.boots.strict.IccFinder
 import com.agoda.boots.strict.SccFinder
 
+/**
+ * Main controller object. Used to interact with the library.
+ *
+ * The default scenario of library's usage is as follows:
+ * 1. Provide custom components if any via [configure()][configure] function
+ * 2. Add bootables to work with via [add()][add] function
+ * 3. Request to boot everything or some specific bootables with [boot()][boot] function
+ * 4. Observe boot events with [subscripbe()][subscribe]/[unsubscribe()][unsubscribe]
+ * 5. Get the current status with [report()][report] function
+ *
+ * Supports both Kotlin DSL and Java style.
+ */
 object Boots {
 
     private var executor: Executor = DefaultExecutor()
@@ -31,6 +43,14 @@ object Boots {
         setExecutor()
     }
 
+    /**
+     * Adds given bootable to the system's pool and adds them
+     * to components ([Reporter], [Notifier], [Sequencer]).
+     *
+     * Also runs verification check on every invocation trying to find
+     * SCC (strong connected components) and ICC (incorrect connected components).
+     * @param bootables bootables to add
+     */
     @JvmStatic
     fun add(vararg bootables: Bootable) {
         synchronized(boots) {
@@ -50,6 +70,11 @@ object Boots {
         }
     }
 
+    /**
+     * Sets provided configuration and overrides current component
+     * implementations with defined in the given configuration object.
+     * @param configuration configuration to apply
+     */
     @JvmStatic
     fun configure(configuration: Configuration) {
         synchronized(boots) {
@@ -94,14 +119,30 @@ object Boots {
         }
     }
 
+
+    /**
+     * Sets provided configuration and overrides current component
+     * implementations with defined in the given configuration object.
+     * @param configuration configuration receiver to apply
+     */
     fun configure(configuration: Configuration.() -> Unit) {
         configure(Configuration().apply(configuration))
     }
 
+    /**
+     * Requests library to boot given bootable/bootables satisfying
+     * it's dependencies and critical bootables before.
+     *
+     * It is library's responsibility to take care of boot order,
+     * handling threading, measuring the performance.
+     * @param key bootable/bootables identifier
+     * @param listener subscribing instance
+     */
+    @JvmOverloads
     @JvmStatic
-    fun boot(key: Key, listener: Listener) {
+    fun boot(key: Key, listener: Listener? = null) {
         synchronized(boots) {
-            subscribe(key, listener)
+            listener?.let { subscribe(key, it) }
 
             logger?.log(INFO, "Building task for $key...")
             sequencer.start(key)
@@ -113,42 +154,106 @@ object Boots {
         }
     }
 
+    /**
+     * Requests library to boot given bootable/bootables satisfying
+     * it's dependencies and critical bootables before.
+     *
+     * It is library's responsibility to take care of boot order,
+     * handling threading, measuring the performance.
+     * @param key bootable/bootables identifier
+     * @param listener receiving lambda of listener
+     * @return created listener instance
+     */
     fun boot(key: Key, listener: Listener.() -> Unit) = Listener().apply(listener).also {
         boot(key, it)
     }
 
+    /**
+     * Requests library to boot given bootable/bootables satisfying
+     * it's dependencies and critical bootables before.
+     *
+     * It is library's responsibility to take care of boot order,
+     * handling threading, measuring the performance.
+     * @param key bootable/bootables identifier
+     * @param listener builder instance
+     * @return created listener instance
+     */
     @JvmStatic
     fun boot(key: Key, listener: Listener.Builder) = boot(key) {
         onBoot = { listener.onBoot(it) }
         onFailure = { listener.onFailure(it) }
     }
 
+    /**
+     * Adds given listener to event callbacks of a given key.
+     * @param key bootable/bootables identifier
+     * @param listener subscribing instance
+     */
     @JvmStatic
     fun subscribe(key: Key, listener: Listener) {
         logger?.log(INFO, "Listener for $key has been added")
         notifier.add(key, listener)
     }
 
+    /**
+     * Adds given listener to event callbacks of a given key.
+     * @param key bootable/bootables identifier
+     * @param listener receiving lambda of listener
+     * @return created listener instance
+     */
     fun subscribe(key: Key, listener: Listener.() -> Unit) = Listener().apply(listener).also {
         subscribe(key, it)
     }
 
+    /**
+     * Adds given listener to event callbacks of a given key.
+     * @param key bootable/bootables identifier
+     * @param listener builder instance
+     * @return created listener instance
+     */
+    @JvmStatic
+    fun subscribe(key: Key, listener: Listener.Builder) = subscribe(key) {
+        onBoot = { listener.onBoot(it) }
+        onFailure = { listener.onFailure(it) }
+    }
+
+    /**
+     * Removes given listener from event callbacks of a given key.
+     * @param key bootable/bootables identifier
+     * @param listener unsubscribing instance
+     */
     @JvmStatic
     fun unsubscribe(key: Key, listener: Listener) {
         logger?.log(INFO, "Listener $listener has been removed")
         notifier.remove(key, listener)
     }
 
+    /**
+     * Retrieves the [report][Report] for a given key.
+     * @param key bootable/bootables identifier
+     * @return report for a given key
+     */
     @JvmStatic
     fun report(key: Key): Report {
         logger?.log(INFO, "Report for $key has been requested")
         return reporter.get(key)
     }
 
+    /**
+     * Dsl support operator function.
+     * @param tail receiver lambda to invoke
+     */
     operator fun invoke(tail: Boots.() -> Unit) {
         tail(this)
     }
 
+    /**
+     * Clears bootable list and sets all components to default instances.
+     * Also sets [isStrictMode][Configuration.isStrictMode] to `true` and
+     * sets [logger][Configuration.logger] to `null`.
+     *
+     * Please use with caution. It is not intended for regular use.
+     */
     fun reset() {
         synchronized(boots) {
             logger?.log(DEBUG, "reset() has been invoked! This function is for testing purposes only!")
