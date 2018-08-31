@@ -4,6 +4,12 @@ import android.util.Log
 import com.agoda.boots.Logger
 import com.agoda.boots.Logger.Level.*
 
+/**
+ * Android implementation of [Logger].
+ *
+ * Simply translates log calls to Android's [Log].
+ * @param level minimal log level to output
+ */
 class AndroidLogger(private val level: Logger.Level) : Logger {
 
     override fun log(level: Logger.Level, message: String) {
