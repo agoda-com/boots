@@ -11,6 +11,8 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.ArgumentCaptor
+import org.mockito.Captor
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 
@@ -22,6 +24,8 @@ class BootsTest {
     @Mock lateinit var reporter: Reporter
     @Mock lateinit var sequencer: Sequencer
     @Mock lateinit var listener: (Report) -> Unit
+
+    val captor = argumentCaptor<List<Bootable>>()
 
     @Before
     fun setup() {
@@ -53,7 +57,7 @@ class BootsTest {
         }
 
         // Act
-        Boots.add(listOf(bootable1, bootable2))
+        Boots.add(bootable1, bootable2)
     }
 
     @Test(expected = IncorrectConnectedBootException::class)
@@ -72,7 +76,7 @@ class BootsTest {
         }
 
         // Act
-        Boots.add(listOf(bootable1, bootable2))
+        Boots.add(bootable1, bootable2)
     }
 
     @Test
@@ -88,15 +92,17 @@ class BootsTest {
             override fun boot() {}
         }
 
-        val list = listOf(bootable1, bootable2)
-
         // Act
-        Boots.add(list)
+        Boots.add(bootable1, bootable2)
 
         // Assert
-        verify(notifier).add(list)
-        verify(reporter).add(list)
-        verify(sequencer).add(list)
+        verify(notifier).add(captor.capture())
+        verify(reporter).add(captor.capture())
+        verify(sequencer).add(captor.capture())
+
+        assert(captor.firstValue.containsAll(listOf(bootable1, bootable2)))
+        assert(captor.secondValue.containsAll(listOf(bootable1, bootable2)))
+        assert(captor.thirdValue.containsAll(listOf(bootable1, bootable2)))
     }
 
     @Test
@@ -174,7 +180,7 @@ class BootsTest {
             override fun boot() {}
         }
 
-        Boots.add(listOf(bootable1, bootable2, bootable3, bootable4))
+        Boots.add(bootable1, bootable2, bootable3, bootable4)
 
         whenever(executor.execute(any(), any())).thenAnswer {
             (it.arguments[1] as () -> Unit).invoke()

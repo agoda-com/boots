@@ -35,12 +35,12 @@ class KotlinActivity : AppCompatActivity() {
                 logger = AndroidLogger(DEBUG)
             }
 
-            add(listOf(
+            add(
                     DeviceIdBootable(applicationContext),
                     NetworkRequestBootable(),
                     DatabaseBootable(),
                     RandomTimeBootable()
-            ))
+            )
 
             listener = boot(key) {
                 onBoot = {

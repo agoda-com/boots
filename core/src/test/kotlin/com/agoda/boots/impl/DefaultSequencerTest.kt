@@ -53,7 +53,7 @@ class DefaultSequencerTest {
             override fun boot() {}
         }
 
-        Boots.add(listOf(bootable1, bootable2, bootable3, bootable4))
+        Boots.add(bootable1, bootable2, bootable3, bootable4)
         sequencer.add(listOf(bootable1, bootable2, bootable3, bootable4))
 
         // Act

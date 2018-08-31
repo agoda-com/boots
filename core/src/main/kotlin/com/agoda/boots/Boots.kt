@@ -32,7 +32,7 @@ object Boots {
     }
 
     @JvmStatic
-    fun add(bootables: List<Bootable>) {
+    fun add(vararg bootables: Bootable) {
         synchronized(boots) {
             logger?.log(INFO, "Trying to add bootables: $bootables")
 
@@ -40,9 +40,11 @@ object Boots {
 
             boots.addAll(bootables)
 
-            reporter.add(bootables)
-            notifier.add(bootables)
-            sequencer.add(bootables)
+            bootables.toList().let {
+                reporter.add(it)
+                notifier.add(it)
+                sequencer.add(it)
+            }
 
             logger?.log(INFO, "Bootables added!")
         }

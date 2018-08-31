@@ -44,12 +44,12 @@ public class JavaActivity extends AppCompatActivity {
                 .setLogger(new AndroidLogger(DEBUG))
                 .build());
 
-        Boots.add(Arrays.asList(
+        Boots.add(
                 new DeviceIdBootable(getApplicationContext()),
                 new NetworkRequestBootable(),
                 new DatabaseBootable(),
                 new RandomTimeBootable()
-        ));
+        );
 
         listener = Boots.boot(KEY, new Builder() {
             @Override

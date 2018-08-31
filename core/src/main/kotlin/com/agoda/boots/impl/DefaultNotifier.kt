@@ -25,11 +25,8 @@ open class DefaultNotifier : Notifier {
 
     override fun add(key: Key, listener: Listener) {
         synchronized(listeners) {
-            if (!listeners.contains(key)) {
-                listeners[key] = mutableListOf()
-            }
-
-            listeners[key]!!.add(listener)
+            listeners[key] = (listeners[key] ?: mutableListOf()).also { it.add(listener) }
+            check(key, listeners[key]!!)
         }
     }
 

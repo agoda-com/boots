@@ -14,7 +14,7 @@ sealed class Key {
      */
     class Single(val id: String) : Key() {
         override fun hashCode() = id.hashCode()
-        override fun equals(other: Any?) = if (other is Single) id == other.id else false
+        override fun equals(other: Any?) = id == (other as? Single)?.id
         override fun toString() = id
     }
 
@@ -30,7 +30,7 @@ sealed class Key {
         override fun containsAll(elements: Collection<Single>) = keys.containsAll(elements)
         override fun iterator() = keys.iterator()
         override fun hashCode() = keys.hashCode()
-        override fun equals(other: Any?) = if (other is Multiple) keys == other.keys else false
+        override fun equals(other: Any?) = keys == (other as? Multiple)?.keys
 
         override fun toString() = StringBuilder().apply {
             append("{")

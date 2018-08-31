@@ -34,6 +34,6 @@ abstract class Bootable {
     abstract fun boot()
 
     override fun hashCode() = key.hashCode()
-    override fun equals(other: Any?) = key == other
+    override fun equals(other: Any?) = key == (other as? Bootable)?.key
 
 }
