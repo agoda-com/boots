@@ -15,3 +15,7 @@ dependencies {
     testImplementation libraries.mockitoKotlin
     testImplementation libraries.kotlinTest
 }
+
+String art() { 'core' }
+
+apply from: "$rootDir/gradle/scripts/publish-java.gradle"

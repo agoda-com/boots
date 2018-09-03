@@ -34,3 +34,7 @@ dependencies {
     implementation libraries.rx
     implementation libraries.rxAndroid
 }
+
+String art() { 'executor-rx-android' }
+
+apply from: "$rootDir/gradle/scripts/publish-android.gradle"

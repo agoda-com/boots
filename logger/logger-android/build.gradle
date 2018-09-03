@@ -31,3 +31,7 @@ dependencies {
 
     implementation libraries.kotlin
 }
+
+String art() { 'logger-android' }
+
+apply from: "$rootDir/gradle/scripts/publish-android.gradle"

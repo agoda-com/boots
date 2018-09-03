@@ -11,6 +11,7 @@ buildscript {
 
     dependencies {
         classpath gradlePlugins.android
+        classpath gradlePlugins.androidMaven
         classpath gradlePlugins.kotlin
     }
 
