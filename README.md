@@ -1,5 +1,5 @@
 # Boots
-[![Github tag version](https://img.shields.io/github/tag/agoda-com/boots.svg?label=version)](https://bintray.com/agoda/maven/kakao)
+[![Github tag version](https://img.shields.io/github/tag/agoda-com/boots.svg?label=version)](https://bintray.com/agoda/maven/boots)
 [![Kotlin version badge](https://img.shields.io/badge/kotlin-1.2.61-blue.svg)](http://kotlinlang.org/)
 
 Lightweight and easy-to-use bootstrap library for Java | Kotlin | Android
