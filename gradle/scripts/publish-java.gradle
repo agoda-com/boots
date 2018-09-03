@@ -1,20 +1,17 @@
 apply plugin: 'maven-publish'
-apply plugin: 'signing'
 
 task sourcesJar(type: Jar) {
     classifier = 'sources'
     from sourceSets.main.allJava
 }
 
+group = boots.group
+version = boots.version
+
 publishing {
     publications {
-        bootsJava(MavenPublication) {
-            groupId = boots.group
-            version = boots.version
+        library(MavenPublication) {
             artifactId = art()
-
-            from components.java
-            artifact sourcesJar
 
             pom {
                 name = boots.name
@@ -34,24 +31,23 @@ publishing {
                     url = boots.url
                 }
             }
+
+            from components.java
+            artifact sourcesJar
         }
     }
 
     repositories {
         maven {
-            def release = "https://bintray.com/agoda/maven/"
-            def snapshot = "https://oss.sonatype.org/content/repositories/snapshots/"
+            def release = "https://nexus.default.svc.agoda.mobi/repository/maven-releases/"
+            def snapshot = "https://nexus.default.svc.agoda.mobi/repository/maven-snapshots/"
 
             url = boots.version.endsWith('SNAPSHOT') ? snapshot : release
 
             credentials {
-                username System.getenv('BINTRAY_USER')
-                password System.getenv('BINTRAY_KEY')
+                username System.getenv('MAVEN_USER')
+                password System.getenv('MAVEN_PASSWORD')
             }
         }
     }
-}
-
-signing {
-    sign publishing.publications.bootsJava
 }

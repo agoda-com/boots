@@ -1,5 +1,4 @@
 apply plugin: 'maven-publish'
-apply plugin: 'signing'
 apply plugin: 'digital.wup.android-maven-publish'
 
 task sourcesJar(type: Jar) {
@@ -7,15 +6,13 @@ task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
 }
 
+group = boots.group
+version = boots.version
+
 publishing {
     publications {
-        bootsAndroid(MavenPublication) {
-            groupId = boots.group
-            version = boots.version
+        library(MavenPublication) {
             artifactId = art()
-
-            from components.android
-            artifact sourcesJar
 
             pom {
                 name = boots.name
@@ -35,24 +32,23 @@ publishing {
                     url = boots.url
                 }
             }
+
+            from components.android
+            artifact sourcesJar
         }
     }
 
     repositories {
         maven {
-            def release = "https://bintray.com/agoda/maven/"
-            def snapshot = "https://oss.sonatype.org/content/repositories/snapshots/"
+            def release = "https://nexus.default.svc.agoda.mobi/repository/maven-releases/"
+            def snapshot = "https://nexus.default.svc.agoda.mobi/repository/maven-snapshots/"
 
             url = boots.version.endsWith('SNAPSHOT') ? snapshot : release
 
             credentials {
-                username System.getenv('BINTRAY_USER')
-                password System.getenv('BINTRAY_KEY')
+                username System.getenv('MAVEN_USER')
+                password System.getenv('MAVEN_PASSWORD')
             }
         }
     }
-}
-
-signing {
-    sign publishing.publications.bootsAndroid
 }
