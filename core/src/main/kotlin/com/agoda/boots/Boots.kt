@@ -53,6 +53,19 @@ object Boots {
      */
     @JvmStatic
     fun add(vararg bootables: Bootable) {
+        add(bootables.toList())
+    }
+
+    /**
+     * Adds given bootable to the system's pool and adds them
+     * to components ([Reporter], [Notifier], [Sequencer]).
+     *
+     * Also runs verification check on every invocation trying to find
+     * SCC (strong connected components) and ICC (incorrect connected components).
+     * @param bootables bootables to add
+     */
+    @JvmStatic
+    fun add(bootables: List<Bootable>) {
         synchronized(boots) {
             logger?.log(INFO, "Trying to add bootables: $bootables")
 
