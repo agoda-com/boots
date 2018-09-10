@@ -1,5 +1,7 @@
 package com.agoda.boots
 
+import com.agoda.boots.Key.Companion.single
+
 /**
  * This class is used to distinct [bootables][Bootable] in the boot system.
  * Primary goal of a separate class like that is to avoid the need of having
@@ -115,6 +117,14 @@ sealed class Key {
          */
         @JvmStatic
         fun multiple(vararg keys: Key.Single = emptyArray()) = Key.Multiple(keys.toSet())
+
+        /**
+         * Creates an instance of [Excluding] key.
+         * @param keys [single][Single] keys that form current instance
+         * @return instance of [Excluding]
+         */
+        @JvmStatic
+        fun excluding(vararg keys: Key.Single = emptyArray()) = Key.Excluding(keys.toSet())
 
         /**
          * Creates an instance of [Critical] key.
