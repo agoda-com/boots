@@ -42,6 +42,10 @@ open class DefaultSequencer : Sequencer {
                     addAll(resolve(critical()))
                     addAll(resolve(multiple(key)))
                 }
+                is Excluding -> mutableListOf<Key>().apply {
+                    addAll(resolve(critical()))
+                    addAll(resolve(excluding(key)))
+                }
                 is All -> mutableListOf<Key>().apply {
                     addAll(resolve(critical()))
                     addAll(resolve(all()))

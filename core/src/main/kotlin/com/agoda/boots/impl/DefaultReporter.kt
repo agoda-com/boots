@@ -70,10 +70,10 @@ open class DefaultReporter : Reporter {
             val start = all.filter { it.status !is Status.Idle }.minBy { it.start }?.start ?: -1
             val time = all.filter { it.status !is Status.Idle }.maxBy { it.start + it.time }?.let { it.start + it.time - start } ?: -1
             val status = when {
-                all.any { it.status is Failed } -> failed(BootException(all.filter { it.status is Failed }.map { it.key to (it.status as Failed).reason }.toMap()))
                 all.all { it.status is Status.Booted } -> booted()
-                all.all { it.status is Status.Idle } -> idle()
-                else -> booting()
+                all.any { it.status is Status.Booting } -> booting()
+                all.any { it.status is Failed } -> failed(BootException(all.filter { it.status is Failed }.map { it.key to (it.status as Failed).reason }.toMap()))
+                else -> idle()
             }
 
             val dependent = if (key is All) {
@@ -90,6 +90,7 @@ open class DefaultReporter : Reporter {
                 when (key) {
                     is Single -> Report(key, idle())
                     is Multiple -> process(key, multiple(key))
+                    is Excluding -> process(key, excluding(key))
                     is Critical -> process(key, critical())
                     is All -> process(key, all())
                 }

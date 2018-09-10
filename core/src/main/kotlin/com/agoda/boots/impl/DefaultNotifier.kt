@@ -42,6 +42,7 @@ open class DefaultNotifier : Notifier {
             listeners.forEach { k, listeners ->
                 when (k) {
                     is Key.Multiple -> if (k.contains(key)) check(k, listeners)
+                    is Key.Excluding -> if (!k.contains(key)) check(k, listeners)
                     is Key.Critical -> if (boots[key]!!.isCritical) check(k, listeners)
                     is Key.All -> check(k, listeners)
                 }

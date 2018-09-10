@@ -50,6 +50,37 @@ sealed class Key {
     }
 
     /**
+     * Excluding key. Marks all available keys except given set of [single][Single] keys.
+     * @param keys set of [single][Single] keys
+     */
+    class Excluding(private val keys: Set<Single>) : Key(), Set<Single> {
+        override val size = keys.size
+
+        override fun isEmpty() = keys.isEmpty()
+        override fun contains(element: Single) = keys.contains(element)
+        override fun containsAll(elements: Collection<Single>) = keys.containsAll(elements)
+        override fun iterator() = keys.iterator()
+        override fun hashCode() = keys.hashCode()
+        override fun equals(other: Any?) = keys == (other as? Excluding)?.keys
+
+        override fun toString() = StringBuilder().apply {
+            append("{")
+            keys.forEachIndexed { index, key ->
+                if (index > 0) append(" ")
+                append(key)
+                if (index < size - 1) append(",")
+            }
+            append("}")
+        }.toString()
+
+        /**
+         * Checks if this key is not empty
+         * @return true if this key contains one or more [single][Single] key.
+         */
+        fun isNotEmpty() = keys.isNotEmpty()
+    }
+
+    /**
      * Critical key. Used to select all [bootables][Bootable] that have their
      * [isCritical][Bootable.isCritical] flag set to `true`
      */

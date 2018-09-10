@@ -161,6 +161,13 @@ interface Holder {
     fun multiple(key: Key.Multiple) = boots.values.filter { key.contains(it.key) }
 
     /**
+     * Retrieves instances of bootables excluding ones in the given excluding key.
+     * @param key identifier of bootable list
+     * @return list of bootables corresponding to the given key
+     */
+    fun excluding(key: Key.Excluding) = boots.values.filter { !key.contains(it.key) }
+
+    /**
      * Retrieves instances of bootables that have thier [isCritical][Bootable.isCritical] flag
      * set to `true`.
      * @return list of critical bootables
