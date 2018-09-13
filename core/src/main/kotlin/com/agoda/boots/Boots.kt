@@ -1,5 +1,6 @@
 package com.agoda.boots
 
+import com.agoda.boots.Key.Companion.multiple
 import com.agoda.boots.Logger.Level.*
 import com.agoda.boots.Status.Companion.booted
 import com.agoda.boots.Status.Companion.booting
@@ -41,6 +42,29 @@ object Boots {
 
     init {
         setExecutor()
+    }
+
+    /**
+     * Creates instance of bootable and adds it to the system's pool as well
+     * as to components ([Reporter], [Notifier], [Sequencer]).
+     *
+     * Also runs verification check on every invocation trying to find
+     * SCC (strong connected components) and ICC (incorrect connected components).
+     * @param key identifier of bootable
+     * @param dependencies identifiers of bootables which should be executed prior
+     * @param isConcurrent `true` if it can be executed in parallel
+     * @param isCritical `true` if needs to be booted ASAP
+     * @param boot function to invoke when booting
+     */
+    fun add(key: Key.Single, dependencies: Key.Multiple = multiple(),
+            isConcurrent: Boolean = true, isCritical: Boolean = false, boot: () -> Unit) {
+        add(object : Bootable() {
+            override val key = key
+            override val dependencies = dependencies
+            override val isConcurrent = isConcurrent
+            override val isCritical = isCritical
+            override fun boot() { boot() }
+        })
     }
 
     /**

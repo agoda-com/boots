@@ -7,6 +7,7 @@ import android.view.View.VISIBLE
 import com.agoda.boots.Boots
 import com.agoda.boots.Key.Companion.all
 import com.agoda.boots.Key.Companion.multiple
+import com.agoda.boots.Key.Companion.single
 import com.agoda.boots.Listener
 import com.agoda.boots.Logger.Level.DEBUG
 import com.agoda.boots.executor.RxAndroidExecutor
@@ -41,6 +42,12 @@ class KotlinActivity : AppCompatActivity() {
                     DatabaseBootable(),
                     RandomTimeBootable()
             )
+
+            val custom = single("CUSTOM")
+
+            add(custom, isCritical = true) {
+                val something = 2 + 2
+            }
 
             listener = boot(key) {
                 onBoot = {

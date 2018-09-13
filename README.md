@@ -97,6 +97,14 @@ class DeviceIdBootable(private val context: Context) : Bootable() {
     }
 }
 ```
+Or you can use Kotlin DSL to define and add bootable at the same time:
+```kotlin
+Boots {
+    add(Keys.DO_SOMETHING, isCritical = true) {
+        doSomething()
+    }
+}
+```
 So, you're ready to launch your boot sequence. You can do it using simple Kotlin DSL,
 or plain old Java way:
 ```kotlin
