@@ -67,13 +67,15 @@ object Boots {
     @JvmStatic
     fun add(bootables: List<Bootable>) {
         synchronized(boots) {
-            logger?.log(INFO, "Trying to add bootables: $bootables")
+            val toAdd = bootables.filter { !boots.contains(it) }
 
-            verify(boots.plus(bootables))
+            logger?.log(INFO, "Trying to add bootables: $toAdd")
 
-            boots.addAll(bootables)
+            verify(boots.plus(toAdd))
 
-            bootables.toList().let {
+            boots.addAll(toAdd)
+
+            toAdd.let {
                 reporter.add(it)
                 notifier.add(it)
                 sequencer.add(it)
