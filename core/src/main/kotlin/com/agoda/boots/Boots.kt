@@ -76,9 +76,7 @@ object Boots {
      * @param bootables bootables to add
      */
     @JvmStatic
-    fun add(vararg bootables: Bootable) {
-        add(bootables.toList())
-    }
+    fun add(vararg bootables: Bootable) =add(bootables.toList())
 
     /**
      * Adds given bootable to the system's pool and adds them
@@ -164,9 +162,7 @@ object Boots {
      * implementations with defined in the given configuration object.
      * @param configuration configuration receiver to apply
      */
-    fun configure(configuration: Configuration.() -> Unit) {
-        configure(Configuration().apply(configuration))
-    }
+    fun configure(configuration: Configuration.() -> Unit) = configure(Configuration().apply(configuration))
 
     /**
      * Requests library to boot given bootable/bootables satisfying
@@ -203,9 +199,7 @@ object Boots {
      * @param listener receiving lambda of listener
      * @return created listener instance
      */
-    fun boot(key: Key, listener: Listener.() -> Unit) = Listener().apply(listener).also {
-        boot(key, it)
-    }
+    fun boot(key: Key, listener: Listener.() -> Unit) = Listener().apply(listener).also { boot(key, it) }
 
     /**
      * Requests library to boot given bootable/bootables satisfying
@@ -240,9 +234,7 @@ object Boots {
      * @param listener receiving lambda of listener
      * @return created listener instance
      */
-    fun subscribe(key: Key, listener: Listener.() -> Unit) = Listener().apply(listener).also {
-        subscribe(key, it)
-    }
+    fun subscribe(key: Key, listener: Listener.() -> Unit) = Listener().apply(listener).also { subscribe(key, it) }
 
     /**
      * Adds given listener to event callbacks of a given key.
@@ -282,9 +274,7 @@ object Boots {
      * Dsl support operator function.
      * @param tail receiver lambda to invoke
      */
-    operator fun invoke(tail: Boots.() -> Unit) {
-        tail(this)
-    }
+    operator fun invoke(tail: Boots.() -> Unit) = tail(this)
 
     /**
      * Clears bootable list and sets all components to default instances.

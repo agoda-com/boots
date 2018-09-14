@@ -1,6 +1,6 @@
 # Boots
 [![Github tag version](https://img.shields.io/github/tag/agoda-com/boots.svg?label=version)](https://bintray.com/agoda/maven/boots)
-[![Kotlin version badge](https://img.shields.io/badge/kotlin-1.2.61-blue.svg)](http://kotlinlang.org/)
+[![Kotlin version badge](https://img.shields.io/badge/kotlin-1.2.70-blue.svg)](http://kotlinlang.org/)
 
 Lightweight and easy-to-use bootstrap library for Java | Kotlin | Android
 
@@ -42,7 +42,7 @@ Then it's up to the library to do the rest for you.
 
 #### Usage
 
-###### Making a bootable
+##### Making a bootable
 `Bootable` is the base construction that is used in the library to decouple
 your initialization logic. Most of the library's integration process is
 defining your bootables so it is very important to understand it's capabilities.
@@ -130,7 +130,7 @@ listener = Boots.boot(all(), new Builder() {
 });
 ```
 
-###### Checking state and observing
+##### Checking state and observing
 To get the current status of your bootable or list of bootables, you can generate the report:
 ```kotlin
 Boots {
@@ -172,7 +172,7 @@ Holding weak references is not the best solution, since GC time is undetermined
 and invoking weak referenced listeners may lead to unexpected behaviour
 (`IllegalStateException`s in fragments, etc.).
 
-###### Customization
+##### Customization
 Library provides ability to customize it's behaviour through providing
 custom implementation of component interfaces. The components are:
 
@@ -203,8 +203,25 @@ All custom implementations are provided via additional artifacts, so that
 you can grab only core library with default implementation if that is fully
 satisfies your needs. The list of available artifacts is at the **Setup** section.
 
-###### More
+##### More
 For any additional information please refer to library's documentation.
+
+#### Testing
+Library provides a testing artifact to help you easily mock your boot process.
+`mockito` and `mockito-kotlin` are used to provide you with this functionality.
+To mock library's logic, you can use Kotlin DSL or Java style:
+```kotlin
+Mocker {
+    mock(Keys.DEVICE_ID, booting())
+}
+```
+```java
+new Mocker()
+        .mock(Keys.DEVICE_ID, booting())
+        .apply();
+```
+When you use `Mocker`, it automatically mocks all interactions as `Booted` by default
+and immediately triggers all added listeners.
 
 #### Setup
 Maven
@@ -213,7 +230,7 @@ Maven
 <dependency>
   <groupId>com.agoda.boots</groupId>
   <artifactId>core</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.7</version>
   <type>pom</type>
 </dependency>
 
@@ -221,7 +238,7 @@ Maven
 <dependency>
   <groupId>com.agoda.boots</groupId>
   <artifactId>logger-android</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.7</version>
   <type>pom</type>
 </dependency>
 
@@ -229,7 +246,15 @@ Maven
 <dependency>
   <groupId>com.agoda.boots</groupId>
   <artifactId>executor-rx-android</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.7</version>
+  <type>pom</type>
+</dependency>
+
+<!-- test mocker !-->
+<dependency>
+  <groupId>com.agoda.boots</groupId>
+  <artifactId>test</artifactId>
+  <version>0.0.7</version>
   <type>pom</type>
 </dependency>
 ```
@@ -241,13 +266,16 @@ repositories {
 
 dependencies {
     // core library
-    implementation 'com.agoda.boots:core:0.0.1'
+    implementation 'com.agoda.boots:core:0.0.7'
 
     // android logger
-    implementation 'com.agoda.boots:logger-android:0.0.1'
+    implementation 'com.agoda.boots:logger-android:0.0.7'
 
     // rx android executor
-    implementation 'com.agoda.boots:executor-rx-android:0.0.1'
+    implementation 'com.agoda.boots:executor-rx-android:0.0.7'
+
+    // test mocker
+    implementation 'com.agoda.boots:test:0.0.7'
 }
 ```
 

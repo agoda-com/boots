@@ -5,18 +5,17 @@ apply from: "$rootDir/gradle/scripts/dependencies.gradle"
 
 sourceSets {
     main.java.srcDirs += "src/main/kotlin"
-    test.java.srcDirs += "src/test/kotlin"
 }
 
 dependencies {
-    implementation libraries.kotlin
+    api project(':core')
+
+    api libraries.mockito
+    api libraries.mockitoKotlin
 
     testImplementation libraries.junit
-    testImplementation libraries.mockito
-    testImplementation libraries.mockitoKotlin
-    testImplementation libraries.kotlinTest
 }
 
-String art() { 'core' }
+String art() { 'default' }
 
 apply from: "$rootDir/gradle/scripts/publish-java.gradle"
