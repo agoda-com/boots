@@ -56,6 +56,12 @@ open class DefaultNotifier : Notifier {
         }
     }
 
+    override fun remove(listener: Listener) {
+        synchronized(listeners) {
+            listeners.forEach { it.value.remove(listener) }
+        }
+    }
+
     private fun notify(report: Report, listeners: MutableList<Listener>) {
         when (report.status) {
             is Booted -> if (executor.isMainThreadSupported) {

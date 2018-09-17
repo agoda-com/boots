@@ -92,6 +92,12 @@ interface Notifier : Holder {
      * @param listener listener to not be invoked on such events
      */
     fun remove(key: Key, listener: Listener)
+
+    /**
+     * Disables given listener to receive event callbacks for all events.
+     * @param listener listener to not be invoked
+     */
+    fun remove(listener: Listener)
 }
 
 /**

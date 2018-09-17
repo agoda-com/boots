@@ -260,6 +260,17 @@ object Boots {
     }
 
     /**
+     * Removes given listener from all event callbacks completely.
+     * @param listener unsubscribing instance
+     */
+    @JvmStatic
+    fun unsubscribe(listener: Listener) {
+        logger?.log(INFO, "Listener $listener has been removed")
+        notifier.remove(listener)
+    }
+
+
+    /**
      * Retrieves the [report][Report] for a given key.
      * @param key bootable/bootables identifier
      * @return report for a given key
