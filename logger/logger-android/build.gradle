@@ -27,8 +27,7 @@ android {
 }
 
 dependencies {
-    api project(':core')
-
+    implementation project(':core')
     implementation libraries.kotlin
 }
 

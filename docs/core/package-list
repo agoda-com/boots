@@ -1,0 +1,6 @@
+$dokka.format:gfm
+$dokka.linkExtension:md
+
+com.agoda.boots
+com.agoda.boots.impl
+com.agoda.boots.strict

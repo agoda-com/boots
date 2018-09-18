@@ -1,9 +1,21 @@
 apply plugin: 'maven-publish'
 apply plugin: 'digital.wup.android-maven-publish'
+apply plugin: 'org.jetbrains.dokka-android'
+
+dokka {
+    moduleName = art()
+    outputFormat = 'gfm'
+    outputDirectory = "$rootDir/docs/"
+}
 
 task sourcesJar(type: Jar) {
     classifier = 'sources'
     from android.sourceSets.main.java.srcDirs
+}
+
+task javadocJar(type: Jar, dependsOn: dokka) {
+    classifier = 'javadoc'
+    from dokka.outputDirectory + "/${art()}"
 }
 
 group = boots.group
@@ -35,6 +47,7 @@ publishing {
 
             from components.android
             artifact sourcesJar
+            artifact javadocJar
         }
     }
 

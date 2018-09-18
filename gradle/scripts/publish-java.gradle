@@ -1,8 +1,20 @@
 apply plugin: 'maven-publish'
+apply plugin: 'org.jetbrains.dokka'
+
+dokka {
+    moduleName = art()
+    outputFormat = 'gfm'
+    outputDirectory = "$rootDir/docs/"
+}
 
 task sourcesJar(type: Jar) {
     classifier = 'sources'
-    from sourceSets.main.allJava
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: dokka) {
+    classifier = 'javadoc'
+    from dokka.outputDirectory + "/${art()}"
 }
 
 group = boots.group
@@ -34,6 +46,7 @@ publishing {
 
             from components.java
             artifact sourcesJar
+            artifact javadocJar
         }
     }
 

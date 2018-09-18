@@ -13,6 +13,8 @@ buildscript {
         classpath gradlePlugins.android
         classpath gradlePlugins.androidMaven
         classpath gradlePlugins.kotlin
+        classpath gradlePlugins.dokka
+        classpath gradlePlugins.dokkaAndroid
     }
 
 }
