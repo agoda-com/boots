@@ -21,5 +21,4 @@ By default, any [report](#) will return report with [Booted](#) status and 0 exe
 
 | Name | Summary |
 |---|---|
-| [apply](apply.md) | `fun apply(): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)<br>Applies configured mocks to the library. |
 | [mock](mock.md) | `fun mock(key: Key, status: Status): `[`Mocker`](./index.md)<br>Mocks behaviour of library for given key. |

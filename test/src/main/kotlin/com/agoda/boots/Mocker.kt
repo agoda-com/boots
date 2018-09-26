@@ -61,13 +61,7 @@ class Mocker @JvmOverloads constructor(tail: Mocker.() -> Unit = {}) {
         whenever(reporter.get(key)).thenReturn(Report(key, status))
     }
 
-    /**
-     * Applies configured mocks to the library.
-     *
-     * Invoked automatically when Kotlin DSL is used.
-     * You need to invoke it manually when using Java builder style.
-     */
-    fun apply() {
+    private fun apply() {
         Boots {
             configure {
                 notifier = this@Mocker.notifier
