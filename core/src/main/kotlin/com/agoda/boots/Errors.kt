@@ -8,9 +8,7 @@ package com.agoda.boots
 class BootException(reasons: Map<Key, Throwable>) : Throwable() {
     override val message = StringBuilder().apply {
         appendln("Problems were encountered while booting sequence!")
-        reasons.forEach { key, value ->
-            appendln("$key -> ${value.message}")
-        }
+        for ((key, value) in reasons) { appendln("$key -> ${value.message}") }
     }.toString()
 }
 
@@ -22,10 +20,10 @@ class BootException(reasons: Map<Key, Throwable>) : Throwable() {
 class StrongConnectedBootException(scc: List<List<Key>>) : Throwable() {
     override val message = StringBuilder().apply {
         appendln("Strong connected components are not allowed!")
-        scc.forEach {
+        for (it in scc) {
             append("Components: ")
-            it.forEachIndexed { i, key ->
-                append(key)
+            for (i in 0 until it.size) {
+                append(it[i])
                 if (i < it.size - 1) append(" -> ")
             }
             appendln()
@@ -41,8 +39,6 @@ class StrongConnectedBootException(scc: List<List<Key>>) : Throwable() {
 class IncorrectConnectedBootException(icc: List<Pair<Key, Key>>) : Throwable() {
     override val message = StringBuilder().apply {
         appendln("Incorrect connected components are not allowed!")
-        icc.forEach {
-            appendln("Components: ${it.first} -> ${it.second}")
-        }
+        for (it in icc) { appendln("Components: ${it.first} -> ${it.second}") }
     }.toString()
 }

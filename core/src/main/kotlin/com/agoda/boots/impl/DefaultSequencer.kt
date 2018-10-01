@@ -33,32 +33,24 @@ open class DefaultSequencer : Sequencer {
 
     override fun start(key: Key) {
         synchronized(boots) {
-            map[key] = when (key) {
-                is Single -> mutableListOf<Key>().apply {
-                    addAll(resolve(critical()))
-                    addAll(resolve(listOf(boots[key]!!)))
-                }
-                is Multiple -> mutableListOf<Key>().apply {
-                    addAll(resolve(critical()))
-                    addAll(resolve(multiple(key)))
-                }
-                is Excluding -> mutableListOf<Key>().apply {
-                    addAll(resolve(critical()))
-                    addAll(resolve(excluding(key)))
-                }
-                is All -> mutableListOf<Key>().apply {
-                    addAll(resolve(critical()))
-                    addAll(resolve(all()))
-                }
-                is Critical -> resolve(critical())
+            map[key] = mutableListOf<Key>().apply {
+                addAll(resolve(critical()))
+
+                addAll(when (key) {
+                    is Single -> resolve(listOf(boots[key]!!))
+                    is Multiple -> resolve(multiple(key))
+                    is Excluding -> resolve(excluding(key))
+                    is All -> resolve(all())
+                    else -> emptyList()
+                })
             }
 
             logger?.let {
                 val list = map[key]!!
                 val sb = StringBuilder()
 
-                list.forEachIndexed { i, key ->
-                    sb.append(key)
+                for (i in 0 until list.size) {
+                    sb.append(list[i])
                     if (i < list.size - 1) sb.append(" -> ")
                 }
 
@@ -116,8 +108,8 @@ open class DefaultSequencer : Sequencer {
         val list = mutableListOf<Key>()
         val visited = mutableMapOf<Key, Boolean>()
 
-        boots.forEach { visited[it.key] = false }
-        bootables.forEach { if (visited[it.key] == false) visit(it.key, visited, list) }
+        for (it in boots) { visited[it.key] = false }
+        for (it in bootables) { if (visited[it.key] == false) visit(it.key, visited, list) }
 
         return list.toMutableList()
     }
@@ -139,7 +131,7 @@ open class DefaultSequencer : Sequencer {
             if (boot.dependencies.isEmpty()) {
                 if (!list.contains(key)) list.add(key)
             } else {
-                boot.dependencies.forEach { if (visited[it] == false) visit(it, visited, list) }
+                for (it in boot.dependencies) { if (visited[it] == false) visit(it, visited, list) }
                 if (!list.contains(key)) list.add(key)
             }
         }
@@ -155,12 +147,12 @@ open class DefaultSequencer : Sequencer {
      */
     protected fun update(report: Report) {
         if (report.status is Booted) {
-            map.values.forEach { it.remove(report.key) }
+            for (it in map.values) { it.remove(report.key) }
         } else if (report.status is Failed) {
             val bootable = boots[report.key]!!
 
             if (bootable.isCritical) {
-                map.values.forEach {
+                for (it in map.values) {
                     if (it.contains(report.key)) {
                         tasks.remove(it)
                         it.clear()

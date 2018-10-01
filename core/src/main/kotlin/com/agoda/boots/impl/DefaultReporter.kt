@@ -41,24 +41,24 @@ open class DefaultReporter : Reporter {
 
             val bootable = boots[key]!!
 
-            bootable.dependencies.forEach {
-                reports[it]!!.run {
-                    var found = false
+            for (it in bootable.dependencies) {
+                val rep = reports[it]!!
+                var found = false
 
-                    for (dep in dependent) {
-                        if (dep.key == key) {
-                            found = true
-                            break
-                        }
+                for (dependency in rep.dependent) {
+                    if (dependency.key == key) {
+                        found = true
+                        break
                     }
+                }
 
-                    if (!found) {
-                        reports[it] = reports[it]!!.copy(dependent = dependent.plus(report))
-                    }
+                if (!found) {
+                    reports[it] = reports[it]!!.copy(dependent = rep.dependent.plus(report))
                 }
             }
 
-            return report.also { reports[key] = it }
+            reports[key] = report
+            return report
         }
     }
 
@@ -67,17 +67,17 @@ open class DefaultReporter : Reporter {
 
         fun process(key: Key, boots: List<Bootable>): Report {
             val all = boots.map { get(it.key) }
-            val start = all.filter { it.status !is Status.Idle }.minBy { it.start }?.start ?: -1
-            val time = all.filter { it.status !is Status.Idle }.maxBy { it.start + it.time }?.let { it.start + it.time - start } ?: -1
+            val start = all.asSequence().filter { it.status !is Status.Idle }.minBy { it.start }?.start ?: -1
+            val time = all.asSequence().filter { it.status !is Status.Idle }.maxBy { it.start + it.time }?.let { it.start + it.time - start } ?: -1
             val status = when {
                 all.all { it.status is Status.Booted } -> booted()
                 all.any { it.status is Status.Booting } -> booting()
-                all.any { it.status is Failed } -> failed(BootException(all.filter { it.status is Failed }.map { it.key to (it.status as Failed).reason }.toMap()))
+                all.any { it.status is Failed } -> failed(BootException(all.asSequence().filter { it.status is Failed }.map { it.key to (it.status as Failed).reason }.toMap()))
                 else -> idle()
             }
 
             val dependent = if (key is All) {
-                boots.filter { it.dependencies.isEmpty() }.map { get(it.key) }
+                boots.asSequence().filter { it.dependencies.isEmpty() }.map { get(it.key) }.toList()
             } else {
                 all
             }
@@ -86,14 +86,12 @@ open class DefaultReporter : Reporter {
         }
 
         synchronized(reports) {
-            return reports[key]?.copy() ?: run {
-                when (key) {
-                    is Single -> Report(key, idle())
-                    is Multiple -> process(key, multiple(key))
-                    is Excluding -> process(key, excluding(key))
-                    is Critical -> process(key, critical())
-                    is All -> process(key, all())
-                }
+            return reports[key]?.copy() ?: when (key) {
+                is Single -> Report(key, idle())
+                is Multiple -> process(key, multiple(key))
+                is Excluding -> process(key, excluding(key))
+                is Critical -> process(key, critical())
+                is All -> process(key, all())
             }
         }
     }

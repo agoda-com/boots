@@ -40,9 +40,7 @@ object Boots {
 
     private var capacity: Int = -1
 
-    init {
-        setExecutor()
-    }
+    init { setExecutor() }
 
     /**
      * Creates instance of bootable and adds it to the system's pool as well
@@ -76,7 +74,7 @@ object Boots {
      * @param bootables bootables to add
      */
     @JvmStatic
-    fun add(vararg bootables: Bootable) =add(bootables.toList())
+    fun add(vararg bootables: Bootable) = add(bootables.toList())
 
     /**
      * Adds given bootable to the system's pool and adds them
@@ -95,9 +93,9 @@ object Boots {
 
             verify(boots.plus(toAdd))
 
-            boots.addAll(toAdd)
-
             toAdd.let {
+                boots.addAll(it)
+
                 reporter.add(it)
                 notifier.add(it)
                 sequencer.add(it)
@@ -213,8 +211,8 @@ object Boots {
      */
     @JvmStatic
     fun boot(key: Key, listener: Listener.Builder) = boot(key) {
-        onBoot = { listener.onBoot(it) }
-        onFailure = { listener.onFailure(it) }
+        onBoot = listener::onBoot
+        onFailure = listener::onFailure
     }
 
     /**
@@ -244,8 +242,8 @@ object Boots {
      */
     @JvmStatic
     fun subscribe(key: Key, listener: Listener.Builder) = subscribe(key) {
-        onBoot = { listener.onBoot(it) }
-        onFailure = { listener.onFailure(it) }
+        onBoot = listener::onBoot
+        onFailure = listener::onFailure
     }
 
     /**

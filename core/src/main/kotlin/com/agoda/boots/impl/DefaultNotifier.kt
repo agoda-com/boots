@@ -39,12 +39,12 @@ open class DefaultNotifier : Notifier {
                 notify(report, it)
             }
 
-            listeners.forEach { k, listeners ->
+            for ((k, v) in listeners) {
                 when (k) {
-                    is Key.Multiple -> if (k.contains(key)) check(k, listeners)
-                    is Key.Excluding -> if (!k.contains(key)) check(k, listeners)
-                    is Key.Critical -> if (boots[key]!!.isCritical) check(k, listeners)
-                    is Key.All -> check(k, listeners)
+                    is Key.Multiple -> if (k.contains(key)) check(k, v)
+                    is Key.Excluding -> if (!k.contains(key)) check(k, v)
+                    is Key.Critical -> if (boots[key]!!.isCritical) check(k, v)
+                    is Key.All -> check(k, v)
                 }
             }
         }
@@ -58,21 +58,21 @@ open class DefaultNotifier : Notifier {
 
     override fun remove(listener: Listener) {
         synchronized(listeners) {
-            listeners.forEach { it.value.remove(listener) }
+            for (it in listeners.values) { it.remove(listener) }
         }
     }
 
     private fun notify(report: Report, listeners: MutableList<Listener>) {
         when (report.status) {
             is Booted -> if (executor.isMainThreadSupported) {
-                listeners.forEach { executor.execute(false) { it.onBoot(report) } }
+                for (it in listeners) { executor.execute(false) { it.onBoot(report) } }
             } else {
-                listeners.forEach { it.onBoot(report) }
+                for (it in listeners) { it.onBoot(report) }
             }
             is Failed -> if (executor.isMainThreadSupported) {
-                listeners.forEach { executor.execute(false) { it.onFailure(report) } }
+                for (it in listeners) { executor.execute(false) { it.onFailure(report) } }
             } else {
-                listeners.forEach { it.onFailure(report) }
+                for (it in listeners) { it.onFailure(report) }
             }
         }
 
