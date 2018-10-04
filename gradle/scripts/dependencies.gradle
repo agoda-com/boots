@@ -13,8 +13,8 @@ ext.versions = [
         testRunner      : '1.0.2',
         testRules       : '1.0.2',
         kakao           : '1.4.0',
-        boots           : '0.1.4',
-        bootsCode       : 14,
+        boots           : '0.1.5',
+        bootsCode       : 15,
         compileSdk      : 28,
         targetSdk       : 28,
         minSdk          : 16
@@ -49,5 +49,5 @@ ext.boots = [
         url             : 'https://github.com/agoda-com/boots',
         git             : 'https://github.com/agoda-com/boots.git',
         group           : 'com.agoda.boots',
-        version         : '0.1.4'
+        version         : '0.1.5'
 ]

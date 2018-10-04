@@ -52,8 +52,10 @@ open class DefaultReporter : Reporter {
                     }
                 }
 
-                if (!found) {
-                    reports[it] = reports[it]!!.copy(dependent = rep.dependent.plus(report))
+                reports[it] = if (!found) {
+                    reports[it]!!.copy(dependent = rep.dependent.plus(report))
+                } else {
+                    reports[it]!!.copy(dependent = rep.dependent.map { if (it.key == key) report else it})
                 }
             }
 
