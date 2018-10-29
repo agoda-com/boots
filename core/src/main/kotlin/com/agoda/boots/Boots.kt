@@ -356,8 +356,7 @@ object Boots {
                             if (status is Booted) {
                                 logger.log(INFO, "Bootable ${it.key} booted successfully in $time ms!")
                             } else if (status is Failed) {
-                                logger.log(if (it.isCritical) ERROR else WARNING,
-                                        "Bootable ${it.key} failed to load due to: ${status.reason}")
+                                logger.log(if (it.isCritical) ERROR else WARNING, "Bootable ${it.key} failed to load!", status.reason)
                             }
                         }
 
