@@ -41,24 +41,39 @@ class Mocker @JvmOverloads constructor(tail: Mocker.() -> Unit = {}) {
      *
      * When mocked, [boot][Boots.boot] request or [subscription][Boots.subscribe] with given key will:
      * - immediately invoke provided listener calling [onBoot][Listener.onBoot] if provided status is [Booted][Status.Booted].
-     * - immediately invoke provided listener calling [onBoot][Listener.onFailure] if provided status is [Booted][Status.Failed].
+     * - immediately invoke provided listener calling [onFailure][Listener.onFailure] if provided status is [Failed][Status.Failed].
      * - will not invoke provided listener in all other cases
      *
      * When mocked, [report][Boots.report] for given key will return report with given status and 0 execution time.
      * @param key identifier to mock
-     * @param status status to mock
+     * @param status status to set
      * @return self (for Java builder style usage)
      */
-    fun mock(key: Key, status: Status) = this.apply {
+    fun mock(key: Key, status: Status) = mock(key, Report(key, status))
+
+    /**
+     * Mocks behaviour of library for given key.
+     *
+     * When mocked, [boot][Boots.boot] request or [subscription][Boots.subscribe] with given key will:
+     * - immediately invoke provided listener calling [onBoot][Listener.onBoot] if provided report's status is [Booted][Status.Booted].
+     * - immediately invoke provided listener calling [onFailure][Listener.onFailure] if provided report's status is [Failed][Status.Failed].
+     * - will not invoke provided listener in all other cases
+     *
+     * When mocked, [report][Boots.report] for given key will return given report.
+     * @param key identifier to mock
+     * @param report report to return
+     * @return self (for Java builder style usage)
+     */
+    fun mock(key: Key, report: Report) = this.apply {
         whenever(notifier.add(eq(key), any())).thenAnswer {
-            if (status is Status.Booted) {
-                (it.arguments[1] as Listener).onBoot(Report(key, status))
-            } else if (status is Status.Failed) {
-                (it.arguments[1] as Listener).onFailure(Report(key, status))
+            if (report.status is Status.Booted) {
+                (it.arguments[1] as Listener).onBoot(report)
+            } else if (report.status is Status.Failed) {
+                (it.arguments[1] as Listener).onFailure(report)
             }
         }
 
-        whenever(reporter.get(key)).thenReturn(Report(key, status))
+        whenever(reporter.get(key)).thenReturn(report)
     }
 
     private fun apply() {

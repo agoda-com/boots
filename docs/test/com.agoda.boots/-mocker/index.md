@@ -21,4 +21,4 @@ By default, any [report](#) will return report with [Booted](#) status and 0 exe
 
 | Name | Summary |
 |---|---|
-| [mock](mock.md) | `fun mock(key: Key, status: Status): `[`Mocker`](./index.md)<br>Mocks behaviour of library for given key. |
+| [mock](mock.md) | `fun mock(key: Key, status: Status): `[`Mocker`](./index.md)<br>`fun mock(key: Key, report: Report): `[`Mocker`](./index.md)<br>Mocks behaviour of library for given key. |
