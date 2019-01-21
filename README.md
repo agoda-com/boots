@@ -1,6 +1,6 @@
 # Boots
 [![Github tag version](https://img.shields.io/github/tag/agoda-com/boots.svg?label=version)](https://bintray.com/agoda/maven/boots)
-[![Kotlin version badge](https://img.shields.io/badge/kotlin-1.2.70-blue.svg)](http://kotlinlang.org/)
+[![Kotlin version badge](https://img.shields.io/badge/kotlin-1.3.11-blue.svg)](http://kotlinlang.org/)
 
 Lightweight and easy-to-use bootstrap library for Java | Kotlin | Android
 
@@ -230,7 +230,7 @@ Maven
 <dependency>
   <groupId>com.agoda.boots</groupId>
   <artifactId>core</artifactId>
-  <version>0.0.7</version>
+  <version>0.1.8</version>
   <type>pom</type>
 </dependency>
 
@@ -238,7 +238,7 @@ Maven
 <dependency>
   <groupId>com.agoda.boots</groupId>
   <artifactId>logger-android</artifactId>
-  <version>0.0.7</version>
+  <version>0.1.8</version>
   <type>pom</type>
 </dependency>
 
@@ -246,7 +246,7 @@ Maven
 <dependency>
   <groupId>com.agoda.boots</groupId>
   <artifactId>executor-rx-android</artifactId>
-  <version>0.0.7</version>
+  <version>0.1.8</version>
   <type>pom</type>
 </dependency>
 
@@ -254,7 +254,7 @@ Maven
 <dependency>
   <groupId>com.agoda.boots</groupId>
   <artifactId>test</artifactId>
-  <version>0.0.7</version>
+  <version>0.1.8</version>
   <type>pom</type>
 </dependency>
 ```
@@ -266,16 +266,16 @@ repositories {
 
 dependencies {
     // core library
-    implementation 'com.agoda.boots:core:0.0.7'
+    implementation 'com.agoda.boots:core:0.1.8'
 
     // android logger
-    implementation 'com.agoda.boots:logger-android:0.0.7'
+    implementation 'com.agoda.boots:logger-android:0.1.8'
 
     // rx android executor
-    implementation 'com.agoda.boots:executor-rx-android:0.0.7'
+    implementation 'com.agoda.boots:executor-rx-android:0.1.8'
 
     // test mocker
-    implementation 'com.agoda.boots:test:0.0.7'
+    testImplementation 'com.agoda.boots:test:0.1.8'
 }
 ```
 
@@ -298,3 +298,4 @@ Boots is available under the [Apache License, Version 2.0](https://github.com/ag
 
 * [Unlimity](https://github.com/unlimity) - **Ilya Lim**
 * [Сdsap](https://github.com/cdsap) - **Inaki Villar**
+* [Vacxe](https://github.com/vacxe) - **Konstantin Aksenov**
