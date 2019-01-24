@@ -230,7 +230,7 @@ Maven
 <dependency>
   <groupId>com.agoda.boots</groupId>
   <artifactId>core</artifactId>
-  <version>0.1.8</version>
+  <version>LATEST_VERSION</version>
   <type>pom</type>
 </dependency>
 
@@ -238,7 +238,7 @@ Maven
 <dependency>
   <groupId>com.agoda.boots</groupId>
   <artifactId>logger-android</artifactId>
-  <version>0.1.8</version>
+  <version>LATEST_VERSION</version>
   <type>pom</type>
 </dependency>
 
@@ -246,7 +246,7 @@ Maven
 <dependency>
   <groupId>com.agoda.boots</groupId>
   <artifactId>executor-rx-android</artifactId>
-  <version>0.1.8</version>
+  <version>LATEST_VERSION</version>
   <type>pom</type>
 </dependency>
 
@@ -254,7 +254,7 @@ Maven
 <dependency>
   <groupId>com.agoda.boots</groupId>
   <artifactId>test</artifactId>
-  <version>0.1.8</version>
+  <version>LATEST_VERSION</version>
   <type>pom</type>
 </dependency>
 ```
@@ -266,16 +266,16 @@ repositories {
 
 dependencies {
     // core library
-    implementation 'com.agoda.boots:core:0.1.8'
+    implementation 'com.agoda.boots:core:LATEST_VERSION'
 
     // android logger
-    implementation 'com.agoda.boots:logger-android:0.1.8'
+    implementation 'com.agoda.boots:logger-android:LATEST_VERSION'
 
     // rx android executor
-    implementation 'com.agoda.boots:executor-rx-android:0.1.8'
+    implementation 'com.agoda.boots:executor-rx-android:LATEST_VERSION'
 
     // test mocker
-    testImplementation 'com.agoda.boots:test:0.1.8'
+    testImplementation 'com.agoda.boots:test:LATEST_VERSION'
 }
 ```
 
