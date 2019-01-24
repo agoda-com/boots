@@ -11,6 +11,9 @@ jobs:
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "sample/build.gradle" }}
       - run:
+          name: Accept licenses
+          command: sdkmanager --update && yes | sdkmanager --licenses
+      - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
       - save_cache:
@@ -36,6 +39,9 @@ jobs:
         - checkout
         - restore_cache:
             key: jars-{{ checksum "build.gradle" }}-{{ checksum  "sample/build.gradle" }}
+        - run:
+            name: Accept licenses
+            command: sdkmanager --update && yes | sdkmanager --licenses
         - run:
             name: Download Dependencies
             command: ./gradlew androidDependencies
