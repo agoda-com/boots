@@ -108,9 +108,9 @@ workflows:
       #    filters:
       #      branches:
       #        ignore: master
-      - deploy-job:
-          requires:
-            - build-job
-          filters:
-            branches:
-              only: master
+      #- deploy-job:
+      #    requires:
+      #      - build-job
+      #    filters:
+      #      branches:
+      #        only: master
