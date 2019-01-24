@@ -102,12 +102,12 @@ workflows:
   build-deploy:
     jobs:
       - build-job
-      - automation-tests-job:
-          requires:
-            - build-job
-          filters:
-            branches:
-              ignore: master
+      #- automation-tests-job:
+      #    requires:
+      #      - build-job
+      #    filters:
+      #      branches:
+      #        ignore: master
       - deploy-job:
           requires:
             - build-job
