@@ -20,14 +20,13 @@ jobs:
       - run:
           name: Run Tests
           command: ./gradlew test
+      - run: ./gradlew jacocoTestReport
+      - run: bash <(curl -s https://codecov.io/bash)
       - store_artifacts:
           path: app/build/reports
           destination: reports
       - store_test_results:
           path: app/build/test-results
-      - run: gradle test
-      - run: gradle jacocoTestReport
-      - run: bash <(curl -s https://codecov.io/bash)
 
   deploy-job:
       working_directory: ~/code
