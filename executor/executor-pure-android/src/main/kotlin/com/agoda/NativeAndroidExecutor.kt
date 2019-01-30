@@ -22,9 +22,7 @@ class NativeAndroidExecutor @JvmOverloads constructor(
 
     override fun execute(isConcurrent: Boolean, executable: () -> Unit) {
         if (isConcurrent) {
-            executor.submit {
-                executable()
-            }
+            executor.submit(executable)
         } else {
             handler.post(executable)
         }
