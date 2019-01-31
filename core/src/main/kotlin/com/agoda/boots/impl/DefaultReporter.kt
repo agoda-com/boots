@@ -71,7 +71,7 @@ open class DefaultReporter : Reporter {
             val all = boots.map { get(it.key) }
             val start = all.asSequence().filter { it.status !is Status.Idle }.minBy { it.start }?.start ?: -1
             val time = all.asSequence().filter { it.status !is Status.Idle }.maxBy { it.start + it.time }?.let { it.start + it.time - start } ?: -1
-            val status = when {
+            val status = if (all.isEmpty()) idle() else when {
                 all.all { it.status is Status.Booted } -> booted()
                 all.any { it.status is Status.Booting } -> booting()
                 all.any { it.status is Failed } -> failed(BootException(all.asSequence().filter { it.status is Failed }.map { it.key to (it.status as Failed).reason }.toMap()))
