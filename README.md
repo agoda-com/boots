@@ -1,6 +1,7 @@
 # Boots
 [![Bintray version](https://api.bintray.com/packages/agoda/maven/boots/images/download.svg)](https://bintray.com/agoda/maven/boots)
 [![Kotlin version badge](https://img.shields.io/badge/kotlin-1.3.11-blue.svg)](http://kotlinlang.org/)
+[![codecov](https://codecov.io/gh/agoda-com/boots/branch/master/graph/badge.svg)](https://codecov.io/gh/agoda-com/boots)
 
 Lightweight and easy-to-use bootstrap library for Java | Kotlin | Android
 
