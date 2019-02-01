@@ -1,6 +1,6 @@
 include ':core'
 include ':logger:logger-android'
 include ':executor:executor-rx-android'
-include ':executor:executor-pure-android'
+include ':executor:executor-android'
 include ':test'
 include ':sample'

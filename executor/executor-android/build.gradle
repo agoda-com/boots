@@ -32,6 +32,6 @@ dependencies {
     implementation libraries.kotlin
 }
 
-String art() { 'executor-pure-android' }
+String art() { 'executor-android' }
 
 apply from: "$rootDir/gradle/scripts/publish-android.gradle"

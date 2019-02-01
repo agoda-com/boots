@@ -33,7 +33,7 @@ android {
 dependencies {
     implementation project(':core')
     implementation project(':executor:executor-rx-android')
-    implementation project(':executor:executor-pure-android')
+    implementation project(':executor:executor-android')
     implementation project(':logger:logger-android')
 
     implementation libraries.kotlin
