@@ -1,19 +1,16 @@
 package com.agoda.boots.sample
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import com.agoda.boots.Boots
+import com.agoda.boots.Executor
 import com.agoda.boots.Key.Companion.all
-import com.agoda.boots.Key.Companion.multiple
 import com.agoda.boots.Key.Companion.single
 import com.agoda.boots.Listener
 import com.agoda.boots.Logger.Level.DEBUG
-import com.agoda.boots.executor.RxAndroidExecutor
 import com.agoda.boots.logger.AndroidLogger
-import rx.schedulers.Schedulers
-
 import kotlinx.android.synthetic.main.activity_main.*
 
 class KotlinActivity : AppCompatActivity() {
@@ -21,10 +18,16 @@ class KotlinActivity : AppCompatActivity() {
     private val key = all()
 
     var listener: Listener? = null
+    private var executor: Executor? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        intent.extras?.let {
+            (it.getSerializable("executor") as ExecutorEnum).let {
+                executor = it.executor
+            }
+        }
     }
 
     override fun onStart() {
@@ -32,7 +35,7 @@ class KotlinActivity : AppCompatActivity() {
 
         Boots {
             configure {
-                executor = RxAndroidExecutor(Schedulers.io())
+                executor = this@KotlinActivity.executor
                 logger = AndroidLogger(DEBUG)
             }
 
