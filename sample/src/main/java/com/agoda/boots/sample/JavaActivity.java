@@ -5,14 +5,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import com.agoda.boots.*;
-import com.agoda.boots.Listener.Builder;
-import com.agoda.boots.executor.RxAndroidExecutor;
-import com.agoda.boots.logger.AndroidLogger;
-import org.jetbrains.annotations.NotNull;
-import rx.schedulers.Schedulers;
 
-import java.util.Arrays;
+import com.agoda.boots.Boots;
+import com.agoda.boots.Configuration;
+import com.agoda.boots.Executor;
+import com.agoda.boots.Key;
+import com.agoda.boots.Listener;
+import com.agoda.boots.Listener.Builder;
+import com.agoda.boots.Report;
+import com.agoda.boots.logger.AndroidLogger;
+
+import org.jetbrains.annotations.NotNull;
 
 import static com.agoda.boots.Key.all;
 import static com.agoda.boots.Logger.Level.DEBUG;
@@ -25,12 +28,19 @@ public class JavaActivity extends AppCompatActivity {
     private TextView mTextView;
 
     private Listener listener;
+    private Executor executor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+            ExecutorEnum executorFromIntent = (ExecutorEnum) extras.getSerializable("executor");
+            if(executorFromIntent != null) {
+                executor = executorFromIntent.getExecutor();
+            }
+        }
         mProgressBar = findViewById(R.id.progressBar);
         mTextView = findViewById(R.id.textView);
     }
@@ -40,7 +50,7 @@ public class JavaActivity extends AppCompatActivity {
         super.onStart();
 
         Boots.configure(new Configuration.Builder()
-                .setExecutor(new RxAndroidExecutor(Schedulers.io()))
+                .setExecutor(executor)
                 .setLogger(new AndroidLogger(DEBUG))
                 .build());
 

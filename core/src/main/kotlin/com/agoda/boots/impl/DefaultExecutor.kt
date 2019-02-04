@@ -22,7 +22,7 @@ open class DefaultExecutor @JvmOverloads constructor(
 
     override val isMainThreadSupported = false
 
-    private val pool = Executors.newCachedThreadPool()
+    protected val pool: ExecutorService = Executors.newCachedThreadPool()
 
     override fun execute(isConcurrent: Boolean, executable: () -> Unit) {
         if (isConcurrent) {
