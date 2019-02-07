@@ -11,6 +11,41 @@ import com.agoda.boots.Key.Companion.single
 sealed class Key {
 
     /**
+     * Property that is `true` when all of this key's matching [bootables][Bootable]
+     * are in the [idle][Status.Idle] state.
+     */
+    val isIdle: Boolean
+        get() = Boots.report(this).status is Status.Idle
+
+    /**
+     * Property that is `true` when any of this key's matching [bootables][Bootable]
+     * are in the [booting][Status.Booting] state.
+     */
+    val isBooting: Boolean
+        get() = Boots.report(this).status is Status.Booting
+
+    /**
+     * Property that is `true` when all of this key's matching [bootables][Bootable]
+     * are in the [booted][Status.Booted] state.
+     */
+    val isBooted: Boolean
+        get() = Boots.report(this).status is Status.Booted
+
+    /**
+     * Property that is `true` when any of this key's matching [bootables][Bootable]
+     * are in the [failed][Status.Failed] state.
+     */
+    val isFailed: Boolean
+        get() = Boots.report(this).status is Status.Failed
+
+    /**
+     * Property that contains current general [status][Status] of all of this
+     * key's matching [bootables][Bootable].
+     */
+    val status: Status
+        get() = Boots.report(this).status
+
+    /**
      * Single key. Marks specific [bootable][Bootable] in the system.
      * @param id unique identifier of a key
      */

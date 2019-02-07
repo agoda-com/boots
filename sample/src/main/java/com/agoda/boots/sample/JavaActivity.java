@@ -36,9 +36,9 @@ public class JavaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
-            Executor executorFromIntent = extras.getParcelable("executor");
+            ExecutorEnum executorFromIntent = (ExecutorEnum) extras.getSerializable("executor");
             if(executorFromIntent != null) {
-                executor = executorFromIntent;
+                executor = executorFromIntent.getExecutor();
             }
         }
         mProgressBar = findViewById(R.id.progressBar);
