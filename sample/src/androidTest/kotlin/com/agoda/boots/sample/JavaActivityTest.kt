@@ -34,4 +34,13 @@ class JavaActivityTest : MainActivityTest() {
             textView { isVisible() }
         }
     }
+
+    @Test
+    fun testCoroutineAndroidExecutor() {
+        rule.launchActivity(Intent().putExtra("executor", ExecutorEnum.COROUTINE))
+        screen {
+            progressBar { isGone() }
+            textView { isVisible() }
+        }
+    }
 }

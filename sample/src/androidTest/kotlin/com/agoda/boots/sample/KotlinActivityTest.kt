@@ -35,4 +35,12 @@ class KotlinActivityTest : MainActivityTest() {
         }
     }
 
+    @Test
+    fun testCoroutineAndroidExecutor() {
+        rule.launchActivity(Intent().putExtra("executor", ExecutorEnum.COROUTINE))
+        screen {
+            progressBar { isGone() }
+            textView { isVisible() }
+        }
+    }
 }

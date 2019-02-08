@@ -34,9 +34,12 @@ dependencies {
     implementation project(':core')
     implementation project(':executor:executor-rx-android')
     implementation project(':executor:executor-android')
+    implementation project(':executor:executor-coroutine-android')
     implementation project(':logger:logger-android')
 
     implementation libraries.kotlin
+    implementation libraries.coroutineCore
+    implementation libraries.coroutineAndroid
     implementation libraries.appcompat
     implementation libraries.rx
 
