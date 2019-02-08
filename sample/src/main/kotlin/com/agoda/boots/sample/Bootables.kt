@@ -1,11 +1,9 @@
 package com.agoda.boots.sample
 
 import android.content.Context
-import android.database.sqlite.SQLiteDatabase
 import android.os.Looper
 import android.preference.PreferenceManager
 import com.agoda.boots.Bootable
-import com.agoda.boots.Key
 import com.agoda.boots.Key.Companion.multiple
 import java.lang.Math.random
 import java.util.*
