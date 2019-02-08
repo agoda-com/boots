@@ -11,26 +11,12 @@ import kotlinx.coroutines.*
  * and [non-concurrent][com.agoda.boots.Bootable.isConcurrent] bootables.
  */
 class CoroutineAndroidExecutor @JvmOverloads constructor(
-    private val coroutineScope: CoroutineScope,
-    private val dispatcher: CoroutineDispatcher,
+    coroutineScope: CoroutineScope,
+    dispatcher: CoroutineDispatcher,
     override val capacity: Int = DEFAULT_CAPACITY
 ) : CoroutineExecutor(coroutineScope, dispatcher, capacity) {
 
     init {
         coroutineScope.plus(Dispatchers.Main)
-    }
-
-    override val isMainThreadSupported = true
-
-    override fun execute(isConcurrent: Boolean, executable: () -> Unit) {
-        coroutineScope.launch {
-            if (isConcurrent) {
-                withContext(dispatcher) {
-                    executable.invoke()
-                }
-            } else {
-                executable.invoke()
-            }
-        }
     }
 }
