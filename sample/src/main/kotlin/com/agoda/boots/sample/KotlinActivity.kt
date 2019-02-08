@@ -41,6 +41,7 @@ class KotlinActivity : AppCompatActivity() {
 
             add(
                     DeviceIdBootable(applicationContext),
+                    MainThreadBootable(),
                     NetworkRequestBootable(),
                     DatabaseBootable(),
                     RandomTimeBootable()
