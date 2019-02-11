@@ -16,6 +16,8 @@ class CoroutineAndroidExecutor @JvmOverloads constructor(
     override val capacity: Int = DEFAULT_CAPACITY
 ) : CoroutineExecutor(coroutineScope, dispatcher, capacity) {
 
+    override val isMainThreadSupported = true
+
     init {
         coroutineScope.plus(Dispatchers.Main)
     }
