@@ -16,7 +16,7 @@ open class CoroutineExecutor @JvmOverloads constructor(
     override val capacity: Int = DEFAULT_CAPACITY
 ) : Executor {
 
-    override val isMainThreadSupported = true
+    override val isMainThreadSupported = false
 
     override fun execute(isConcurrent: Boolean, executable: () -> Unit) {
         coroutineScope.launch {
