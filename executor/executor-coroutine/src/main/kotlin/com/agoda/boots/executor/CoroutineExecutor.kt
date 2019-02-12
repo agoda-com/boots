@@ -7,8 +7,7 @@ import kotlinx.coroutines.*
 /**
  * Coroutine implementation of [Executor].
  *
- * Can switch to dispatcher to invoke listeners
- * and [non-concurrent][com.agoda.boots.Bootable.isConcurrent] bootables.
+ * Can switch to dispatcher to launch [concurrent][com.agoda.boots.Bootable.isConcurrent] bootables.
  */
 open class CoroutineExecutor @JvmOverloads constructor(
     private val coroutineScope: CoroutineScope,
