@@ -56,6 +56,7 @@ public class JavaActivity extends AppCompatActivity {
 
         Boots.add(
                 new DeviceIdBootable(getApplicationContext()),
+                new MainThreadBootable(),
                 new NetworkRequestBootable(),
                 new DatabaseBootable(),
                 new RandomTimeBootable()

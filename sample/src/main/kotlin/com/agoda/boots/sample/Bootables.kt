@@ -1,10 +1,9 @@
 package com.agoda.boots.sample
 
 import android.content.Context
-import android.database.sqlite.SQLiteDatabase
+import android.os.Looper
 import android.preference.PreferenceManager
 import com.agoda.boots.Bootable
-import com.agoda.boots.Key
 import com.agoda.boots.Key.Companion.multiple
 import java.lang.Math.random
 import java.util.*
@@ -23,7 +22,18 @@ class DeviceIdBootable(private val context: Context) : Bootable() {
                     .apply()
         }
     }
+}
 
+class MainThreadBootable : Bootable() {
+    override val key = Keys.DEVICE_ID
+    override val isCritical = true
+    override val isConcurrent = false
+
+    override fun boot() {
+       if(Looper.myLooper() != Looper.getMainLooper()) {
+           throw IllegalThreadStateException("Should be invoked on Main Thread")
+       }
+    }
 }
 
 class NetworkRequestBootable : Bootable() {

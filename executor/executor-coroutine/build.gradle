@@ -1,0 +1,18 @@
+apply plugin: 'java-library'
+apply plugin: 'kotlin'
+
+apply from: "$rootDir/gradle/scripts/dependencies.gradle"
+
+sourceSets {
+    main.java.srcDirs += "src/main/kotlin"
+    test.java.srcDirs += "src/test/kotlin"
+}
+
+dependencies {
+    implementation project(':core')
+    implementation libraries.coroutineCore
+}
+
+String art() { 'executor-coroutine' }
+
+apply from: "$rootDir/gradle/scripts/publish-java.gradle"
