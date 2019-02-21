@@ -29,9 +29,11 @@ android {
 
 dependencies {
     implementation project(':core')
-    api project(':executor:executor-coroutine')
+
     implementation libraries.kotlin
     implementation libraries.coroutineAndroid
+
+    api project(':executor:executor-coroutine')
 }
 
 String art() { 'executor-coroutine-android' }
