@@ -1,6 +1,6 @@
 # Boots
 [![Bintray version](https://api.bintray.com/packages/agoda/maven/boots/images/download.svg)](https://bintray.com/agoda/maven/boots)
-[![Kotlin version badge](https://img.shields.io/badge/kotlin-1.3.11-blue.svg)](http://kotlinlang.org/)
+[![Kotlin version badge](https://img.shields.io/badge/kotlin-1.3.21-blue.svg)](http://kotlinlang.org/)
 [![codecov](https://codecov.io/gh/agoda-com/boots/branch/master/graph/badge.svg)](https://codecov.io/gh/agoda-com/boots)
 
 Lightweight and easy-to-use bootstrap library for Java | Kotlin | Android
@@ -251,6 +251,30 @@ Maven
   <type>pom</type>
 </dependency>
 
+<!-- coroutine executor !-->
+<dependency>
+  <groupId>com.agoda.boots</groupId>
+  <artifactId>executor-coroutine</artifactId>
+  <version>LATEST_VERSION</version>
+  <type>pom</type>
+</dependency>
+
+<!-- coroutine android executor !-->
+<dependency>
+  <groupId>com.agoda.boots</groupId>
+  <artifactId>executor-coroutine-android</artifactId>
+  <version>LATEST_VERSION</version>
+  <type>pom</type>
+</dependency>
+
+<!-- pure android executor !-->
+<dependency>
+  <groupId>com.agoda.boots</groupId>
+  <artifactId>executor-android</artifactId>
+  <version>LATEST_VERSION</version>
+  <type>pom</type>
+</dependency>
+
 <!-- test mocker !-->
 <dependency>
   <groupId>com.agoda.boots</groupId>
@@ -269,11 +293,20 @@ dependencies {
     // core library
     implementation 'com.agoda.boots:core:LATEST_VERSION'
 
-    // android logger
+    // pure android logger
     implementation 'com.agoda.boots:logger-android:LATEST_VERSION'
 
     // rx android executor
     implementation 'com.agoda.boots:executor-rx-android:LATEST_VERSION'
+
+    // coroutine executor
+    implementation 'com.agoda.boots:executor-coroutine:LATEST_VERSION'
+
+    // coroutine android executor
+    implementation 'com.agoda.boots:executor-coroutine-android:LATEST_VERSION'
+
+    // pure android executor
+    implementation 'com.agoda.boots:executor-android:LATEST_VERSION'
 
     // test mocker
     testImplementation 'com.agoda.boots:test:LATEST_VERSION'
