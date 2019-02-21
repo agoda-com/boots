@@ -29,6 +29,7 @@ execution of concurrent ones.
 |---|---|
 | [capacity](capacity.md) | `open val capacity: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)<br>maximum concurrent threads capacity |
 | [isMainThreadSupported](is-main-thread-supported.md) | `open val isMainThreadSupported: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)<br>true if executor can execute given function on main thread (switch context) |
+| [pool](pool.md) | `val pool: `[`ExecutorService`](http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/ExecutorService.html) |
 
 ### Functions
 
