@@ -3,7 +3,7 @@ package com.agoda.boots
 import com.agoda.boots.Key.Companion.excluding
 import com.agoda.boots.Key.Companion.multiple
 import com.agoda.boots.Key.Companion.single
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

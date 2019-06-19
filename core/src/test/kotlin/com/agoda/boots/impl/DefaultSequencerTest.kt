@@ -5,8 +5,8 @@ import com.agoda.boots.Key.Companion.critical
 import com.agoda.boots.Key.Companion.multiple
 import com.agoda.boots.Key.Companion.single
 import com.agoda.boots.Status.Companion.booted
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
