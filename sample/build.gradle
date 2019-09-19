@@ -31,7 +31,7 @@ android {
 }
 
 dependencies {
-    implementation project(':core')
+    implementation project(':boots')
     implementation project(':executor:executor-rx-android')
     implementation project(':executor:executor-android')
     implementation project(':executor:executor-coroutine-android')

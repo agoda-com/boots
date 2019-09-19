@@ -1,6 +1,6 @@
 # Boots
 [![Bintray version](https://api.bintray.com/packages/agoda/maven/boots/images/download.svg)](https://bintray.com/agoda/maven/boots)
-[![Kotlin version badge](https://img.shields.io/badge/kotlin-1.3.21-blue.svg)](http://kotlinlang.org/)
+[![Kotlin version badge](https://img.shields.io/badge/kotlin-1.3.50-blue.svg)](http://kotlinlang.org/)
 [![codecov](https://codecov.io/gh/agoda-com/boots/branch/master/graph/badge.svg)](https://codecov.io/gh/agoda-com/boots)
 
 Lightweight and easy-to-use bootstrap library for Java | Kotlin | Android
@@ -291,7 +291,7 @@ repositories {
 
 dependencies {
     // core library
-    implementation 'com.agoda.boots:core:LATEST_VERSION'
+    implementation 'com.agoda.boots:boots:LATEST_VERSION'
 
     // pure android logger
     implementation 'com.agoda.boots:logger-android:LATEST_VERSION'
