@@ -9,7 +9,7 @@ sourceSets {
 }
 
 dependencies {
-    implementation project(':core')
+    implementation project(':boots')
     implementation libraries.mockito
     implementation libraries.mockitoKotlin
 

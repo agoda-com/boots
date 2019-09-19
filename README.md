@@ -291,7 +291,7 @@ repositories {
 
 dependencies {
     // core library
-    implementation 'com.agoda.boots:core:LATEST_VERSION'
+    implementation 'com.agoda.boots:boots:LATEST_VERSION'
 
     // pure android logger
     implementation 'com.agoda.boots:logger-android:LATEST_VERSION'

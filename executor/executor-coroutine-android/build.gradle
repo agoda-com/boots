@@ -28,7 +28,7 @@ android {
 }
 
 dependencies {
-    implementation project(':core')
+    implementation project(':boots')
 
     implementation libraries.kotlin
     implementation libraries.coroutineAndroid

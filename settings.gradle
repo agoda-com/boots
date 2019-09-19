@@ -1,4 +1,4 @@
-include ':core'
+include ':boots'
 include ':logger:logger-android'
 include ':executor:executor-rx-android'
 include ':executor:executor-android'
