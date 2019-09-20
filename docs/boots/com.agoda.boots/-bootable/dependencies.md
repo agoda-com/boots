@@ -2,7 +2,7 @@
 
 # dependencies
 
-`open val dependencies: `[`Multiple`](../-key/-multiple/index.md)
+`open val dependencies: `[`Key.Multiple`](../-key/-multiple/index.md)
 
 dependencies of the bootable. System will not proceed with
     invoking the bootable until all bootables with given keys

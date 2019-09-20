@@ -17,10 +17,10 @@ any logic required to boot the system properly.
 
 | Name | Summary |
 |---|---|
-| [dependencies](dependencies.md) | `open val dependencies: `[`Multiple`](../-key/-multiple/index.md)<br>dependencies of the bootable. System will not proceed with     invoking the bootable until all bootables with given keys     have successfully executed. |
+| [dependencies](dependencies.md) | `open val dependencies: `[`Key.Multiple`](../-key/-multiple/index.md)<br>dependencies of the bootable. System will not proceed with     invoking the bootable until all bootables with given keys     have successfully executed. |
 | [isConcurrent](is-concurrent.md) | `open val isConcurrent: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)<br>flag that indicates that this bootable can be executed on     a separate thread. |
 | [isCritical](is-critical.md) | `open val isCritical: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)<br>Flag that indicated that this bootable is critical to the boot     process and should be started ASAP at all times. That means that     even if you request some other bootable to be executed, the system     will boot all critical bootables before actually start any     non-critical bootable.     Also, if critical bootable fails to boot, all boot tasks will stop     immediately and all listeners will be called back with failure. |
-| [key](key.md) | `abstract val key: `[`Single`](../-key/-single/index.md)<br>unique identifier of the bootable |
+| [key](key.md) | `abstract val key: `[`Key.Single`](../-key/-single/index.md)<br>unique identifier of the bootable |
 
 ### Functions
 

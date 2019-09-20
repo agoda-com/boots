@@ -2,7 +2,7 @@
 
 # excluding
 
-`@JvmStatic fun excluding(vararg keys: `[`Single`](-single/index.md)` = emptyArray()): `[`Excluding`](-excluding/index.md)
+`@JvmStatic fun excluding(vararg keys: `[`Key.Single`](-single/index.md)` = emptyArray()): `[`Key.Excluding`](-excluding/index.md)
 
 Creates an instance of [Excluding](-excluding/index.md) key.
 

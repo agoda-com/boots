@@ -27,8 +27,8 @@ the holders.
 | [add](add.md) | `open fun add(bootables: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Bootable`](../-bootable/index.md)`>): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)<br>Adds bootables to the storage and maps it with corresponding keys for easier access. |
 | [all](all.md) | `open fun all(): `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Bootable`](../-bootable/index.md)`>`<br>Retrieves all available bootables to the system. |
 | [critical](critical.md) | `open fun critical(): `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Bootable`](../-bootable/index.md)`>`<br>Retrieves instances of bootables that have thier [isCritical](../-bootable/is-critical.md) flag set to `true`. |
-| [excluding](excluding.md) | `open fun excluding(key: `[`Excluding`](../-key/-excluding/index.md)`): `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Bootable`](../-bootable/index.md)`>`<br>Retrieves instances of bootables excluding ones in the given excluding key. |
-| [multiple](multiple.md) | `open fun multiple(key: `[`Multiple`](../-key/-multiple/index.md)`): `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Bootable`](../-bootable/index.md)`>`<br>Retrieves instances of bootables that are included in the given multiple key. |
+| [excluding](excluding.md) | `open fun excluding(key: `[`Key.Excluding`](../-key/-excluding/index.md)`): `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Bootable`](../-bootable/index.md)`>`<br>Retrieves instances of bootables excluding ones in the given excluding key. |
+| [multiple](multiple.md) | `open fun multiple(key: `[`Key.Multiple`](../-key/-multiple/index.md)`): `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Bootable`](../-bootable/index.md)`>`<br>Retrieves instances of bootables that are included in the given multiple key. |
 
 ### Inheritors
 

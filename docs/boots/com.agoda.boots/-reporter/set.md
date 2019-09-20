@@ -2,7 +2,7 @@
 
 # set
 
-`abstract fun set(key: `[`Single`](../-key/-single/index.md)`, status: `[`Status`](../-status/index.md)`, start: `[`Long`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html)` = -1L, time: `[`Long`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html)` = -1L): `[`Report`](../-report/index.md)
+`abstract fun set(key: `[`Key.Single`](../-key/-single/index.md)`, status: `[`Status`](../-status/index.md)`, start: `[`Long`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html)` = -1L, time: `[`Long`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html)` = -1L): `[`Report`](../-report/index.md)
 
 Saves the report data from a controller [object](../-boots/index.md).
 

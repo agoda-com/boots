@@ -2,4 +2,4 @@
 
 # setSequencer
 
-`fun setSequencer(sequencer: `[`Sequencer`](../../-sequencer/index.md)`): `[`Builder`](index.md)
+`fun setSequencer(sequencer: `[`Sequencer`](../../-sequencer/index.md)`): `[`Configuration.Builder`](index.md)

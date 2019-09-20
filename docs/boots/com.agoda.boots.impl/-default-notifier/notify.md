@@ -2,7 +2,7 @@
 
 # notify
 
-`open fun notify(key: `[`Single`](../../com.agoda.boots/-key/-single/index.md)`, report: `[`Report`](../../com.agoda.boots/-report/index.md)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+`open fun notify(key: `[`Key.Single`](../../com.agoda.boots/-key/-single/index.md)`, report: `[`Report`](../../com.agoda.boots/-report/index.md)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
 
 Overrides [Notifier.notify](../../com.agoda.boots/-notifier/notify.md)
 

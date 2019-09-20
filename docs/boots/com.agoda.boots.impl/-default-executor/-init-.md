@@ -6,7 +6,7 @@
 
 Default implementation of [Executor](../../com.agoda.boots/-executor/index.md) for JVM.
 
-Implementation uses cached [ThreadPoolExecutor](http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/ThreadPoolExecutor.html) under the hood and is not able
+Implementation uses cached [ThreadPoolExecutor](https://docs.oracle.com/javase/6/docs/api/java/util/concurrent/ThreadPoolExecutor.html) under the hood and is not able
 to forward non-concurrent bootables to the main thread, executing them on the thread
 that has invoked it.
 

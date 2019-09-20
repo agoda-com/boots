@@ -2,4 +2,4 @@
 
 # contains
 
-`fun contains(element: `[`Single`](../-single/index.md)`): `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)
+`fun contains(element: `[`Key.Single`](../-single/index.md)`): `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)

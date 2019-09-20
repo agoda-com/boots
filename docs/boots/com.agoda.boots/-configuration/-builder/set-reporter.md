@@ -2,4 +2,4 @@
 
 # setReporter
 
-`fun setReporter(reporter: `[`Reporter`](../../-reporter/index.md)`): `[`Builder`](index.md)
+`fun setReporter(reporter: `[`Reporter`](../../-reporter/index.md)`): `[`Configuration.Builder`](index.md)

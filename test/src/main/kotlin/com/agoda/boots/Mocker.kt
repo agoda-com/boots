@@ -5,6 +5,7 @@ import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.eq
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
+import org.mockito.Mockito.lenient
 
 /**
  * This class provides easy-to-use mocking framework through Mockito library.
@@ -22,15 +23,15 @@ class Mocker @JvmOverloads constructor(tail: Mocker.() -> Unit = {}) {
     private val sequencer: Sequencer = mock()
 
     init {
-        whenever(notifier.add(any(), any())).thenAnswer {
+        lenient().`when`(notifier.add(any(), any())).thenAnswer {
             (it.arguments[1] as Listener).onBoot(Report(it.arguments[0] as Key, booted()))
         }
 
-        whenever(reporter.get(any())).thenAnswer {
+        lenient().`when`(reporter.get(any())).thenAnswer {
             Report(it.arguments[0] as Key, booted())
         }
 
-        whenever(sequencer.count()).thenReturn(0)
+        lenient().`when`(sequencer.count()).thenReturn(0)
 
         tail()
         apply()

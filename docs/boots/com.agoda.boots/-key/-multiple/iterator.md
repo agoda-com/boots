@@ -2,4 +2,4 @@
 
 # iterator
 
-`fun iterator(): `[`Iterator`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-iterator/index.html)`<`[`Single`](../-single/index.md)`>`
+`fun iterator(): `[`Iterator`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-iterator/index.html)`<`[`Key.Single`](../-single/index.md)`>`

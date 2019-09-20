@@ -2,4 +2,4 @@
 
 # setStrictMode
 
-`fun setStrictMode(isStrictMode: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)`): `[`Builder`](index.md)
+`fun setStrictMode(isStrictMode: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)`): `[`Configuration.Builder`](index.md)

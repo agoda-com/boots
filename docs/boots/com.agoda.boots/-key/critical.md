@@ -2,7 +2,7 @@
 
 # critical
 
-`@JvmStatic fun critical(): `[`Critical`](-critical/index.md)
+`@JvmStatic fun critical(): `[`Key.Critical`](-critical/index.md)
 
 Creates an instance of [Critical](-critical/index.md) key.
 

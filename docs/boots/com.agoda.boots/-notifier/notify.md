@@ -2,7 +2,7 @@
 
 # notify
 
-`abstract fun notify(key: `[`Single`](../-key/-single/index.md)`, report: `[`Report`](../-report/index.md)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+`abstract fun notify(key: `[`Key.Single`](../-key/-single/index.md)`, report: `[`Report`](../-report/index.md)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
 
 Informs the notifier about bootable state change in the boot system
 so that it can check if there is any listener that it need to call back

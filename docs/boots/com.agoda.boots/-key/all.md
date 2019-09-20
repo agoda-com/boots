@@ -2,7 +2,7 @@
 
 # all
 
-`@JvmStatic fun all(): `[`All`](-all/index.md)
+`@JvmStatic fun all(): `[`Key.All`](-all/index.md)
 
 Creates an instance of [All](-all/index.md) key.
 
