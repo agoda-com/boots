@@ -4,8 +4,8 @@
 
 | Name | Summary |
 |---|---|
-| [com.agoda.boots.BootException](../com.agoda.boots/-boot-exception/index.md) | Exception that aggregates the reasons of failure in case a [report](../com.agoda.boots/-report/index.md) has a [failed](../com.agoda.boots/-status/-failed/index.md) state and is not with [single](../com.agoda.boots/-key/-single/index.md) key. |
 | [com.agoda.boots.Bootable](../com.agoda.boots/-bootable/index.md) | Main boot component. It is a piece of code that executes any logic required to boot the system properly. |
+| [com.agoda.boots.BootException](../com.agoda.boots/-boot-exception/index.md) | Exception that aggregates the reasons of failure in case a [report](../com.agoda.boots/-report/index.md) has a [failed](../com.agoda.boots/-status/-failed/index.md) state and is not with [single](../com.agoda.boots/-key/-single/index.md) key. |
 | [com.agoda.boots.Boots](../com.agoda.boots/-boots/index.md) | Main controller object. Used to interact with the library. |
 | [com.agoda.boots.Configuration](../com.agoda.boots/-configuration/index.md) | Configuration is used to provide a custom component to the [Boots](../com.agoda.boots/-boots/index.md). By default, all fields are null. When you provide a configuration with some actual values to [configure()](../com.agoda.boots/-boots/configure.md), only non-null will be used to replace current ones. |
 | [com.agoda.boots.impl.DefaultExecutor](../com.agoda.boots.impl/-default-executor/index.md) | Default implementation of [Executor](../com.agoda.boots/-executor/index.md) for JVM. |

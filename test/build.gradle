@@ -9,9 +9,11 @@ sourceSets {
 }
 
 dependencies {
-    implementation project(':boots')
+    implementation libraries.kotlin
     implementation libraries.mockito
     implementation libraries.mockitoKotlin
+
+    implementation project(':boots')
 
     testImplementation libraries.junit
 }

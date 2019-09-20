@@ -2,7 +2,7 @@
 
 # set
 
-`open fun set(key: `[`Single`](../../com.agoda.boots/-key/-single/index.md)`, status: `[`Status`](../../com.agoda.boots/-status/index.md)`, start: `[`Long`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html)`, time: `[`Long`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html)`): `[`Report`](../../com.agoda.boots/-report/index.md)
+`open fun set(key: `[`Key.Single`](../../com.agoda.boots/-key/-single/index.md)`, status: `[`Status`](../../com.agoda.boots/-status/index.md)`, start: `[`Long`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html)`, time: `[`Long`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html)`): `[`Report`](../../com.agoda.boots/-report/index.md)
 
 Overrides [Reporter.set](../../com.agoda.boots/-reporter/set.md)
 

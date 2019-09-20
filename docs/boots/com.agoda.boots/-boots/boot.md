@@ -31,7 +31,7 @@ handling threading, measuring the performance.
 **Return**
 created listener instance
 
-`@JvmStatic fun boot(key: `[`Key`](../-key/index.md)`, listener: `[`Builder`](../-listener/-builder/index.md)`): `[`Listener`](../-listener/index.md)
+`@JvmStatic fun boot(key: `[`Key`](../-key/index.md)`, listener: `[`Listener.Builder`](../-listener/-builder/index.md)`): `[`Listener`](../-listener/index.md)
 
 Requests library to boot given bootable/bootables satisfying
 it's dependencies and critical bootables before.

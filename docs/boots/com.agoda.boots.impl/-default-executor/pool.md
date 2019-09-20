@@ -2,4 +2,4 @@
 
 # pool
 
-`protected val pool: `[`ExecutorService`](http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/ExecutorService.html)
+`protected val pool: `[`ExecutorService`](https://docs.oracle.com/javase/6/docs/api/java/util/concurrent/ExecutorService.html)

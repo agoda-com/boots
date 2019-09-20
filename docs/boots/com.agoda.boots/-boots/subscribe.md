@@ -23,7 +23,7 @@ Adds given listener to event callbacks of a given key.
 **Return**
 created listener instance
 
-`@JvmStatic fun subscribe(key: `[`Key`](../-key/index.md)`, listener: `[`Builder`](../-listener/-builder/index.md)`): `[`Listener`](../-listener/index.md)
+`@JvmStatic fun subscribe(key: `[`Key`](../-key/index.md)`, listener: `[`Listener.Builder`](../-listener/-builder/index.md)`): `[`Listener`](../-listener/index.md)
 
 Adds given listener to event callbacks of a given key.
 

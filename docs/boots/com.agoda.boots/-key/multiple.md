@@ -2,7 +2,7 @@
 
 # multiple
 
-`@JvmStatic fun multiple(vararg keys: `[`Single`](-single/index.md)` = emptyArray()): `[`Multiple`](-multiple/index.md)
+`@JvmStatic fun multiple(vararg keys: `[`Key.Single`](-single/index.md)` = emptyArray()): `[`Key.Multiple`](-multiple/index.md)
 
 Creates an instance of [Multiple](-multiple/index.md) key.
 

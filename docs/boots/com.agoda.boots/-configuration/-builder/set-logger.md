@@ -2,4 +2,4 @@
 
 # setLogger
 
-`fun setLogger(logger: `[`Logger`](../../-logger/index.md)`): `[`Builder`](index.md)
+`fun setLogger(logger: `[`Logger`](../../-logger/index.md)`): `[`Configuration.Builder`](index.md)

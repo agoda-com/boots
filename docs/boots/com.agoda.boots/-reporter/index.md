@@ -32,7 +32,7 @@ Default rules for the calculation of common status are as follows:
 | Name | Summary |
 |---|---|
 | [get](get.md) | `abstract fun get(key: `[`Key`](../-key/index.md)`): `[`Report`](../-report/index.md)<br>Retrieves the [report](../-report/index.md) for a given key. In case where [key](get.md#com.agoda.boots.Reporter$get(com.agoda.boots.Key)/key) is not [single](../-key/-single/index.md), reporter generates combined report based on the type of the [key](get.md#com.agoda.boots.Reporter$get(com.agoda.boots.Key)/key). |
-| [set](set.md) | `abstract fun set(key: `[`Single`](../-key/-single/index.md)`, status: `[`Status`](../-status/index.md)`, start: `[`Long`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html)` = -1L, time: `[`Long`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html)` = -1L): `[`Report`](../-report/index.md)<br>Saves the report data from a controller [object](../-boots/index.md). |
+| [set](set.md) | `abstract fun set(key: `[`Key.Single`](../-key/-single/index.md)`, status: `[`Status`](../-status/index.md)`, start: `[`Long`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html)` = -1L, time: `[`Long`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html)` = -1L): `[`Report`](../-report/index.md)<br>Saves the report data from a controller [object](../-boots/index.md). |
 
 ### Inherited Functions
 
@@ -41,8 +41,8 @@ Default rules for the calculation of common status are as follows:
 | [add](../-holder/add.md) | `open fun add(bootables: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Bootable`](../-bootable/index.md)`>): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)<br>Adds bootables to the storage and maps it with corresponding keys for easier access. |
 | [all](../-holder/all.md) | `open fun all(): `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Bootable`](../-bootable/index.md)`>`<br>Retrieves all available bootables to the system. |
 | [critical](../-holder/critical.md) | `open fun critical(): `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Bootable`](../-bootable/index.md)`>`<br>Retrieves instances of bootables that have thier [isCritical](../-bootable/is-critical.md) flag set to `true`. |
-| [excluding](../-holder/excluding.md) | `open fun excluding(key: `[`Excluding`](../-key/-excluding/index.md)`): `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Bootable`](../-bootable/index.md)`>`<br>Retrieves instances of bootables excluding ones in the given excluding key. |
-| [multiple](../-holder/multiple.md) | `open fun multiple(key: `[`Multiple`](../-key/-multiple/index.md)`): `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Bootable`](../-bootable/index.md)`>`<br>Retrieves instances of bootables that are included in the given multiple key. |
+| [excluding](../-holder/excluding.md) | `open fun excluding(key: `[`Key.Excluding`](../-key/-excluding/index.md)`): `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Bootable`](../-bootable/index.md)`>`<br>Retrieves instances of bootables excluding ones in the given excluding key. |
+| [multiple](../-holder/multiple.md) | `open fun multiple(key: `[`Key.Multiple`](../-key/-multiple/index.md)`): `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Bootable`](../-bootable/index.md)`>`<br>Retrieves instances of bootables that are included in the given multiple key. |
 
 ### Inheritors
 

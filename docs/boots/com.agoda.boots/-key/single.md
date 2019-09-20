@@ -2,7 +2,7 @@
 
 # single
 
-`@JvmStatic fun single(id: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)` = ""): `[`Single`](-single/index.md)
+`@JvmStatic fun single(id: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)` = ""): `[`Key.Single`](-single/index.md)
 
 Creates an instance of [Single](-single/index.md) key.
 

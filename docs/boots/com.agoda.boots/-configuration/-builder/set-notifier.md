@@ -2,4 +2,4 @@
 
 # setNotifier
 
-`fun setNotifier(notifier: `[`Notifier`](../../-notifier/index.md)`): `[`Builder`](index.md)
+`fun setNotifier(notifier: `[`Notifier`](../../-notifier/index.md)`): `[`Configuration.Builder`](index.md)

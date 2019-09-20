@@ -2,7 +2,7 @@
 
 # key
 
-`abstract val key: `[`Single`](../-key/-single/index.md)
+`abstract val key: `[`Key.Single`](../-key/-single/index.md)
 
 unique identifier of the bootable
 

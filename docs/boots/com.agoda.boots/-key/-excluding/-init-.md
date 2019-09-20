@@ -2,7 +2,7 @@
 
 # &lt;init&gt;
 
-`Excluding(keys: `[`Set`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html)`<`[`Single`](../-single/index.md)`>)`
+`Excluding(keys: `[`Set`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html)`<`[`Key.Single`](../-single/index.md)`>)`
 
 Excluding key. Marks all available keys except given set of [single](../-single/index.md) keys.
 

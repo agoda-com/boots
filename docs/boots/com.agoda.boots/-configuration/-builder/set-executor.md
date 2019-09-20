@@ -2,4 +2,4 @@
 
 # setExecutor
 
-`fun setExecutor(executor: `[`Executor`](../../-executor/index.md)`): `[`Builder`](index.md)
+`fun setExecutor(executor: `[`Executor`](../../-executor/index.md)`): `[`Configuration.Builder`](index.md)

@@ -2,7 +2,7 @@
 
 # &lt;init&gt;
 
-`Multiple(keys: `[`Set`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html)`<`[`Single`](../-single/index.md)`>)`
+`Multiple(keys: `[`Set`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html)`<`[`Key.Single`](../-single/index.md)`>)`
 
 Multiple key. Marks a set of [single](../-single/index.md) keys.
 

@@ -2,7 +2,7 @@
 
 # add
 
-`fun add(key: `[`Single`](../-key/-single/index.md)`, dependencies: `[`Multiple`](../-key/-multiple/index.md)` = multiple(), isConcurrent: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)` = true, isCritical: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)` = false, boot: () -> `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+`fun add(key: `[`Key.Single`](../-key/-single/index.md)`, dependencies: `[`Key.Multiple`](../-key/-multiple/index.md)` = multiple(), isConcurrent: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)` = true, isCritical: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)` = false, boot: () -> `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
 
 Creates instance of bootable and adds it to the system's pool as well
 as to components ([Reporter](../-reporter/index.md), [Notifier](../-notifier/index.md), [Sequencer](../-sequencer/index.md)).
