@@ -8,10 +8,10 @@ import com.agoda.boots.Key.Companion.single
 import com.agoda.boots.Status.Companion.booted
 import com.agoda.boots.Status.Companion.failed
 import com.agoda.boots.Status.Companion.idle
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.verifyZeroInteractions
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyZeroInteractions
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

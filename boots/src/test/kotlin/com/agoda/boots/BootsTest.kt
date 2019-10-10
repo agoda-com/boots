@@ -1,18 +1,17 @@
 package com.agoda.boots
 
 import com.agoda.boots.Key.Companion.all
+import com.agoda.boots.Key.Companion.multiple
 import com.agoda.boots.Key.Companion.single
 import com.agoda.boots.Status.Booted
 import com.agoda.boots.impl.DefaultNotifier
 import com.agoda.boots.impl.DefaultReporter
 import com.agoda.boots.impl.DefaultSequencer
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockitokotlin2.*
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentCaptor
-import org.mockito.Captor
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 
@@ -45,14 +44,14 @@ class BootsTest {
     fun testVerifySccFailure() {
         // Arrange
         val bootable1 = object : Bootable() {
-            override val key = Key.single("Key 1")
-            override val dependencies = Key.multiple(Key.single("Key 2"))
+            override val key = single("Key 1")
+            override val dependencies = multiple(single("Key 2"))
             override fun boot() {}
         }
 
         val bootable2 = object : Bootable() {
-            override val key = Key.single("Key 2")
-            override val dependencies = Key.multiple(Key.single("Key 1"))
+            override val key = single("Key 2")
+            override val dependencies = multiple(single("Key 1"))
             override fun boot() {}
         }
 
@@ -64,13 +63,13 @@ class BootsTest {
     fun testVerifyIccFailure() {
         // Arrange
         val bootable1 = object : Bootable() {
-            override val key = Key.single("Key 1")
+            override val key = single("Key 1")
             override fun boot() {}
         }
 
         val bootable2 = object : Bootable() {
-            override val key = Key.single("Key 2")
-            override val dependencies = Key.multiple(Key.single("Key 1"))
+            override val key = single("Key 2")
+            override val dependencies = multiple(single("Key 1"))
             override val isCritical = true
             override fun boot() {}
         }
@@ -83,12 +82,12 @@ class BootsTest {
     fun testAdd() {
         // Arrange
         val bootable1 = object : Bootable() {
-            override val key = Key.single("Key 1")
+            override val key = single("Key 1")
             override fun boot() {}
         }
 
         val bootable2 = object : Bootable() {
-            override val key = Key.single("Key 2")
+            override val key = single("Key 2")
             override fun boot() {}
         }
 
@@ -171,7 +170,7 @@ class BootsTest {
 
         val bootable3 = object : Bootable() {
             override val key = key3
-            override val dependencies = Key.multiple(key2)
+            override val dependencies = multiple(key2)
             override fun boot() {}
         }
 
